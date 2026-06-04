@@ -1,15 +1,17 @@
-export const fallbackSupabaseUrl = "https://example.supabase.co";
-export const fallbackSupabaseAnonKey = "public-anon-key";
-
 export function getSupabaseConfig() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+  const url =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    "https://oqpjuhtatyxufksgymqt.supabase.co";
+
+  const anonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    "sb_publishable_piY_1ttbqtN1bEjDBRxJyA_bnCOWbhf";
+
+  const isConfigured = Boolean(url && anonKey && anonKey.startsWith("sb_"));
 
   return {
-    url: url || fallbackSupabaseUrl,
-    anonKey: anonKey || fallbackSupabaseAnonKey,
-    isConfigured: Boolean(url && anonKey)
+    url,
+    anonKey,
+    isConfigured
   };
 }
-
-export const defaultStoreName = "VQ Watches";

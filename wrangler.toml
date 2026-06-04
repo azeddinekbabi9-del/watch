@@ -1,7 +1,6 @@
 name = "watch"
-compatibility_date = "2026-06-04"
-compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 main = ".open-next/worker.js"
+compatibility_date = "2026-06-04"
 
 [assets]
 directory = ".open-next/assets"
@@ -9,4 +8,4 @@ binding = "ASSETS"
 
 [[services]]
 binding = "WORKER_SELF_REFERENCE"
-service = "cloudflare-supabase-store"
+service = "watch"

@@ -5,7 +5,8 @@ import type {
   Order,
   OrderWithItems,
   ProductWithCategory,
-  StoreSettings
+  StoreSettings,
+  TrackOrderResult
 } from "@/types/database";
 
 const now = new Date().toISOString();
@@ -290,6 +291,20 @@ export async function getOrderById(id: string) {
     .maybeSingle();
 
   return (data as unknown as OrderWithItems | null) ?? null;
+}
+
+export async function getTrackedOrderById(id: string) {
+  if (!configured()) {
+    return null;
+  }
+
+  const supabase: any = createSupabaseServerClient();
+  const { data } = await supabase.rpc("track_order", {
+    lookup_order_id: id,
+    lookup_customer_phone: undefined
+  });
+
+  return ((data ?? [])[0] as TrackOrderResult | undefined) ?? null;
 }
 
 export async function getDashboardStats() {

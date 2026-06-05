@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { ArrowRight, Eye } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
 import { formatPrice, productImageFallback } from "@/lib/utils";
@@ -64,8 +64,8 @@ export function ProductCard({
             className: "mt-4 w-full"
           })}
         >
-          <Eye className="h-4 w-4" aria-hidden />
-          View product
+          <ShoppingBag className="h-4 w-4" aria-hidden />
+          Order Now
           <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>

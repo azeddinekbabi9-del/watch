@@ -1,12 +1,11 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { CheckCircle2, Loader2, Minus, Plus, Send } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Loader2, Minus, Plus, Send } from "lucide-react";
 import { z } from "zod";
-import { Button, buttonVariants } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
 import { getSupabaseConfig } from "@/lib/config";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
@@ -14,11 +13,10 @@ import { createClientUuid, createOrderAccessToken, formatPrice } from "@/lib/uti
 import type { ProductWithCategory, StoreSettings } from "@/types/database";
 
 const directOrderSchema = z.object({
-  customer_name: z.string().min(2, "Full name is required."),
-  customer_phone: z.string().min(6, "Phone number is required."),
-  customer_city: z.string().min(2, "City is required."),
-  customer_address: z.string().optional(),
-  customer_notes: z.string().optional()
+  customer_name: z.string().trim().min(2, "Full name is required."),
+  customer_phone: z.string().trim().min(6, "Phone number is required."),
+  customer_city: z.string().trim().min(2, "City is required."),
+  customer_address: z.string().trim().optional()
 });
 
 type DirectOrderFormState = z.infer<typeof directOrderSchema>;
@@ -27,8 +25,7 @@ const initialForm: DirectOrderFormState = {
   customer_name: "",
   customer_phone: "",
   customer_city: "",
-  customer_address: "",
-  customer_notes: ""
+  customer_address: ""
 };
 
 function buildDirectOrderMessage({
@@ -62,8 +59,7 @@ function buildDirectOrderMessage({
     `Customer: ${customer.customer_name}`,
     `Phone: ${customer.customer_phone}`,
     `City: ${customer.customer_city}`,
-    customer.customer_address ? `Address: ${customer.customer_address}` : "",
-    customer.customer_notes ? `Notes: ${customer.customer_notes}` : ""
+    customer.customer_address ? `Address: ${customer.customer_address}` : ""
   ]
     .filter(Boolean)
     .join("\n");
@@ -76,12 +72,10 @@ export function DirectOrderForm({
   product: ProductWithCategory;
   settings: StoreSettings;
 }) {
+  const router = useRouter();
   const [quantity, setQuantity] = React.useState(1);
   const [form, setForm] = React.useState<DirectOrderFormState>(initialForm);
   const [error, setError] = React.useState("");
-  const [success, setSuccess] = React.useState("");
-  const [orderId, setOrderId] = React.useState("");
-  const [whatsappUrl, setWhatsappUrl] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const unavailable = product.stock_status === "out_of_stock";
   const total = product.price * quantity;
@@ -96,9 +90,6 @@ export function DirectOrderForm({
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
-    setSuccess("");
-    setOrderId("");
-    setWhatsappUrl("");
 
     if (unavailable) {
       setError("This product is currently out of stock.");
@@ -151,7 +142,7 @@ export function DirectOrderForm({
           customer_phone: parsed.data.customer_phone,
           customer_city: parsed.data.customer_city,
           customer_address: parsed.data.customer_address || "",
-          customer_notes: parsed.data.customer_notes || null,
+          customer_notes: null,
           total_amount: nextTotal,
           status: "pending"
         });
@@ -190,18 +181,11 @@ export function DirectOrderForm({
         ? createWhatsAppUrl(settings.admin_whatsapp_phone, message)
         : "";
 
-      setOrderId(nextOrderId);
-      setWhatsappUrl(nextWhatsappUrl);
-      setSuccess(
-        config.isConfigured
-          ? "Order saved. WhatsApp is opening with your order details."
-          : "Demo order ready. Connect Supabase to save real orders."
-      );
-      setForm(initialForm);
-
       if (nextWhatsappUrl) {
         window.open(nextWhatsappUrl, "_blank", "noopener,noreferrer");
       }
+
+      router.push(`/thank-you?orderId=${encodeURIComponent(nextOrderId)}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Order submission failed.");
     } finally {
@@ -279,14 +263,6 @@ export function DirectOrderForm({
             placeholder="Optional"
           />
         </label>
-        <label className="space-y-2 sm:col-span-2">
-          <span className="text-sm font-semibold text-ink">Notes</span>
-          <Textarea
-            value={form.customer_notes}
-            onChange={(event) => update("customer_notes", event.target.value)}
-            placeholder="Optional"
-          />
-        </label>
       </div>
 
       <div className="mt-5 flex items-center justify-between rounded-md bg-cloud p-3 text-sm">
@@ -301,36 +277,6 @@ export function DirectOrderForm({
           {error}
         </p>
       ) : null}
-      {success ? (
-        <div className="mt-4 rounded-md bg-gold/10 p-3 text-sm font-medium text-ink">
-          <p className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-gold" />
-            {success}
-          </p>
-          {orderId ? <p className="mt-2 font-semibold">Order ID: {orderId}</p> : null}
-          <div className="mt-3 flex flex-wrap gap-2">
-            {whatsappUrl ? (
-              <Link
-                href={whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
-                className={buttonVariants({ variant: "primary", size: "sm" })}
-              >
-                Open WhatsApp
-              </Link>
-            ) : null}
-            {orderId ? (
-              <Link
-                href={`/track-order?orderId=${orderId}`}
-                className={buttonVariants({ variant: "outline", size: "sm" })}
-              >
-                Track order
-              </Link>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
-
       <Button
         type="submit"
         size="lg"

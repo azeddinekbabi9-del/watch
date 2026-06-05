@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { BadgeCheck, ChevronLeft, MessageCircle, PackageCheck } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { DirectOrderForm } from "@/components/store/DirectOrderForm";
 import { ProductGallery } from "@/components/store/ProductGallery";
@@ -24,6 +24,23 @@ export default async function ProductDetailsPage({
   }
 
   const inStock = product.stock_status === "available";
+  const productBenefits = [
+    {
+      icon: BadgeCheck,
+      title: "Curated details",
+      text: "Review the image gallery and product description before placing your order."
+    },
+    {
+      icon: MessageCircle,
+      title: "Direct confirmation",
+      text: "Your order is saved and prepared for WhatsApp confirmation with the store admin."
+    },
+    {
+      icon: PackageCheck,
+      title: "Careful delivery",
+      text: settings.delivery_text
+    }
+  ];
 
   return (
     <section className="container-page page-transition py-10">
@@ -36,11 +53,53 @@ export default async function ProductDetailsPage({
       </Link>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-        <ProductGallery
-          productName={product.name}
-          image={product.image_url}
-          gallery={product.gallery_images}
-        />
+        <div className="space-y-5">
+          <ProductGallery
+            productName={product.name}
+            image={product.image_url}
+            gallery={product.gallery_images}
+          />
+
+          <section className="luxury-reveal rounded-md border border-gold/15 bg-white p-5 shadow-soft md:p-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
+              Product Information
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-ink">
+              Details and benefits
+            </h2>
+            {product.description ? (
+              <p className="mt-4 whitespace-pre-line text-base leading-8 text-ink/68">
+                {product.description}
+              </p>
+            ) : (
+              <p className="mt-4 text-base leading-8 text-ink/68">
+                A refined selection from {settings.store_name}, available through
+                direct order with personal confirmation.
+              </p>
+            )}
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              {productBenefits.map((benefit) => {
+                const Icon = benefit.icon;
+
+                return (
+                  <div
+                    key={benefit.title}
+                    className="rounded-md border border-gold/15 bg-cream p-4"
+                  >
+                    <Icon className="h-5 w-5 text-gold" aria-hidden />
+                    <h3 className="mt-3 text-sm font-semibold text-ink">
+                      {benefit.title}
+                    </h3>
+                    <p className="mt-2 text-xs leading-5 text-ink/60">
+                      {benefit.text}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        </div>
 
         <div className="luxury-reveal rounded-md border border-gold/15 bg-cream p-5 shadow-soft md:p-7">
           <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -64,11 +123,10 @@ export default async function ProductDetailsPage({
             ) : null}
           </div>
 
-          {product.description ? (
-            <p className="mt-5 whitespace-pre-line text-base leading-8 text-ink/68">
-              {product.description}
-            </p>
-          ) : null}
+          <p className="mt-5 text-sm leading-7 text-ink/65">
+            Complete the direct order form below. We will confirm availability and
+            delivery details with you shortly.
+          </p>
 
           <DirectOrderForm product={product} settings={settings} />
         </div>

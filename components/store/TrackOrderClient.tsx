@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Loader2, Search } from "lucide-react";
+import { Hash, Loader2, Phone, Search } from "lucide-react";
 import { z } from "zod";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -11,35 +11,17 @@ import { Input } from "@/components/ui/Input";
 import { getSupabaseConfig } from "@/lib/config";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import type { Json, OrderStatus, TrackOrderResult } from "@/types/database";
 
-const trackSchema = z.object({
-  orderId: z.string().trim(),
-  phone: z.string().trim()
-}).superRefine((value, context) => {
-  if (!value.orderId && !value.phone) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Enter an order ID or phone number."
-    });
-  }
+type TrackMode = "phone" | "orderId";
 
-  if (value.orderId && !z.string().uuid().safeParse(value.orderId).success) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Enter a valid order ID.",
-      path: ["orderId"]
-    });
-  }
+const phoneTrackSchema = z.object({
+  phone: z.string().trim().min(6, "Enter a valid phone number.")
+});
 
-  if (value.phone && value.phone.length < 6) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Enter a valid phone number.",
-      path: ["phone"]
-    });
-  }
+const orderIdTrackSchema = z.object({
+  orderId: z.string().trim().uuid("Enter a valid order ID.")
 });
 
 interface ParsedOrderItem {
@@ -93,18 +75,31 @@ export function TrackOrderClient({
   currency: string;
   adminWhatsappPhone: string;
 }) {
+  const [mode, setMode] = React.useState<TrackMode>(
+    initialOrderId ? "orderId" : "phone"
+  );
   const [orderId, setOrderId] = React.useState(initialOrderId ?? "");
   const [phone, setPhone] = React.useState("");
   const [results, setResults] = React.useState<TrackOrderResult[]>([]);
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
+  function selectMode(nextMode: TrackMode) {
+    setMode(nextMode);
+    setError("");
+    setResults([]);
+  }
+
   async function track(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setResults([]);
 
-    const parsed = trackSchema.safeParse({ orderId: orderId.trim(), phone });
+    const parsed =
+      mode === "phone"
+        ? phoneTrackSchema.safeParse({ phone })
+        : orderIdTrackSchema.safeParse({ orderId: orderId.trim() });
+
     if (!parsed.success) {
       setError(parsed.error.errors[0]?.message || "Check your order details.");
       return;
@@ -117,9 +112,15 @@ export function TrackOrderClient({
 
     setLoading(true);
     const supabase: any = createSupabaseBrowserClient();
+    if (!supabase) {
+      setLoading(false);
+      setError("Supabase is not configured. Check your environment variables.");
+      return;
+    }
+
     const { data, error: trackError } = await supabase.rpc("track_order", {
-      lookup_order_id: parsed.data.orderId || undefined,
-      lookup_customer_phone: parsed.data.phone || undefined
+      lookup_order_id: mode === "orderId" ? orderId.trim() : undefined,
+      lookup_customer_phone: mode === "phone" ? phone.trim() : undefined
     });
     setLoading(false);
 
@@ -130,7 +131,11 @@ export function TrackOrderClient({
 
     const trackedOrders = data ?? [];
     if (trackedOrders.length === 0) {
-      setError("Order not found.");
+      setError(
+        mode === "phone"
+          ? "No orders were found for that phone number."
+          : "Order not found."
+      );
       return;
     }
 
@@ -150,7 +155,7 @@ export function TrackOrderClient({
           Follow your timepiece
         </h1>
         <p className="mt-4 text-sm leading-7 text-ink/65">
-          Enter your order ID or the phone number used for your order.
+          Choose one tracking method, then enter the matching detail from your order.
         </p>
       </div>
 
@@ -159,29 +164,77 @@ export function TrackOrderClient({
           onSubmit={track}
           className="luxury-reveal h-fit rounded-md border border-gold/20 bg-cream p-5 shadow-soft"
         >
-          <div className="space-y-4">
-            <label className="space-y-2">
-              <span className="text-sm font-semibold text-ink">Order ID</span>
-              <Input
-                value={orderId}
-                onChange={(event) => setOrderId(event.target.value)}
-                placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-              />
-            </label>
-            <label className="space-y-2">
-              <span className="text-sm font-semibold text-ink">Phone number</span>
-              <Input
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-                placeholder="+212 6..."
-              />
-            </label>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            {[
+              {
+                value: "phone" as const,
+                label: "Track by Phone",
+                description: "Show all orders using one phone number.",
+                icon: Phone
+              },
+              {
+                value: "orderId" as const,
+                label: "Track by Order ID",
+                description: "Show one specific order.",
+                icon: Hash
+              }
+            ].map((option) => {
+              const Icon = option.icon;
+              const active = mode === option.value;
+
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => selectMode(option.value)}
+                  className={cn(
+                    "focus-ring rounded-md border p-4 text-left transition-all duration-300",
+                    active
+                      ? "border-gold bg-white shadow-soft"
+                      : "border-gold/15 bg-white/50 hover:border-gold/45"
+                  )}
+                >
+                  <span className="flex items-center gap-2 text-sm font-bold text-ink">
+                    <Icon className="h-4 w-4 text-gold" aria-hidden />
+                    {option.label}
+                  </span>
+                  <span className="mt-2 block text-xs leading-5 text-ink/55">
+                    {option.description}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-5 space-y-4">
+            {mode === "phone" ? (
+              <label className="space-y-2">
+                <span className="text-sm font-semibold text-ink">Phone number</span>
+                <Input
+                  value={phone}
+                  onChange={(event) => setPhone(event.target.value)}
+                  placeholder="+212 6..."
+                  autoComplete="tel"
+                />
+              </label>
+            ) : (
+              <label className="space-y-2">
+                <span className="text-sm font-semibold text-ink">Order ID</span>
+                <Input
+                  value={orderId}
+                  onChange={(event) => setOrderId(event.target.value)}
+                  placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                />
+              </label>
+            )}
           </div>
 
           {error ? (
             <div className="mt-4 rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
               <p>{error}</p>
-              {error === "Order not found." && contactUrl ? (
+              {(error === "Order not found." ||
+                error === "No orders were found for that phone number.") &&
+              contactUrl ? (
                 <Link
                   href={contactUrl}
                   target="_blank"
@@ -245,11 +298,6 @@ export function TrackOrderClient({
                       <p className="mt-2 text-xl font-semibold text-ink">
                         {formatPrice(Number(result.total_amount), currency)}
                       </p>
-                      {result.customer_notes ? (
-                        <p className="mt-2 text-sm text-ink/60">
-                          Notes: {result.customer_notes}
-                        </p>
-                      ) : null}
                     </div>
                   </div>
 

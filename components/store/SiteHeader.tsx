@@ -59,7 +59,7 @@ export function SiteHeader({
     <header className="sticky top-0 z-40 border-b border-gold/15 bg-cream/92 shadow-[0_10px_35px_rgba(17,16,14,0.06)] backdrop-blur-xl transition-all duration-500">
       <div className="container-page flex h-[72px] items-center justify-between py-3">
         <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Home">
-          <Logo settings={settings} size="sm" />
+          <Logo settings={settings} size="md" />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">{nav}</nav>

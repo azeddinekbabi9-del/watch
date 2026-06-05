@@ -159,6 +159,9 @@ export function ProductForm({ categories, product }: ProductFormProps) {
             value={form.image_url}
             onChange={(event) => update("image_url", event.target.value)}
           />
+          <p className="text-xs leading-5 text-ink/50">
+            Recommended size: 800x800px for desktop, 500x500px for mobile.
+          </p>
         </label>
         <label className="space-y-2 md:col-span-2">
           <span className="text-sm font-semibold text-ink">Gallery images</span>
@@ -167,6 +170,9 @@ export function ProductForm({ categories, product }: ProductFormProps) {
             onChange={(event) => update("gallery_images", event.target.value)}
             placeholder="One image URL per line"
           />
+          <p className="text-xs leading-5 text-ink/50">
+            Recommended size: 800x800px for desktop, 500x500px for mobile.
+          </p>
         </label>
         <label className="space-y-2 md:col-span-2">
           <span className="text-sm font-semibold text-ink">Description</span>

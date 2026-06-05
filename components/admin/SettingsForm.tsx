@@ -51,26 +51,32 @@ export function SettingsForm({ settings }: { settings: StoreSettings }) {
     setError("");
 
     const payload = {
-      store_name: form.store_name,
-      logo_url: form.logo_url || null,
+      store_name: form.store_name.trim(),
+      logo_url: form.logo_url.trim() || null,
       main_color: form.main_color,
-      currency: form.currency,
-      store_phone: form.store_phone || null,
-      store_description: form.store_description || null,
-      admin_whatsapp_phone: form.admin_whatsapp_phone,
-      hero_title: form.hero_title,
-      hero_subtitle: form.hero_subtitle,
-      hero_image_url: form.hero_image_url || null,
-      delivery_text: form.delivery_text,
-      facebook_url: form.facebook_url || null,
-      instagram_url: form.instagram_url || null,
-      tiktok_url: form.tiktok_url || null,
+      currency: form.currency.trim().toUpperCase(),
+      store_phone: form.store_phone.trim() || null,
+      store_description: form.store_description.trim() || null,
+      admin_whatsapp_phone: form.admin_whatsapp_phone.trim(),
+      hero_title: form.hero_title.trim(),
+      hero_subtitle: form.hero_subtitle.trim(),
+      hero_image_url: form.hero_image_url.trim() || null,
+      delivery_text: form.delivery_text.trim(),
+      facebook_url: form.facebook_url.trim() || null,
+      instagram_url: form.instagram_url.trim() || null,
+      tiktok_url: form.tiktok_url.trim() || null,
       show_featured_products: form.show_featured_products,
       show_categories: form.show_categories,
       show_benefits: form.show_benefits
     };
 
     const supabase: any = createSupabaseBrowserClient();
+    if (!supabase) {
+      setSaving(false);
+      setError("Supabase is not configured. Check your environment variables.");
+      return;
+    }
+
     const { error: saveError } = await supabase
       .from("store_settings")
       .upsert({ id: settings.id, ...payload });
@@ -106,6 +112,9 @@ export function SettingsForm({ settings }: { settings: StoreSettings }) {
             value={form.logo_url}
             onChange={(event) => update("logo_url", event.target.value)}
           />
+          <p className="text-xs leading-5 text-ink/50">
+            Recommended: transparent PNG or SVG, clean square or horizontal logo.
+          </p>
         </label>
         <label className="space-y-2">
           <span className="text-sm font-semibold text-ink">Main color</span>
@@ -162,6 +171,9 @@ export function SettingsForm({ settings }: { settings: StoreSettings }) {
             value={form.hero_image_url}
             onChange={(event) => update("hero_image_url", event.target.value)}
           />
+          <p className="text-xs leading-5 text-ink/50">
+            Recommended size: 1600x500px for desktop, 500x250px for mobile.
+          </p>
         </label>
         <label className="space-y-2 md:col-span-2">
           <span className="text-sm font-semibold text-ink">Hero subtitle</span>

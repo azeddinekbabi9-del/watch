@@ -12,7 +12,11 @@ export function Logo({
   textClassName?: string;
 }) {
   const imageSize =
-    size === "lg" ? "h-16 w-16" : size === "sm" ? "h-10 w-10" : "h-12 w-12";
+    size === "lg"
+      ? "h-16 w-16 sm:h-20 sm:w-20"
+      : size === "sm"
+        ? "h-11 w-11 sm:h-12 sm:w-12"
+        : "h-12 w-12 sm:h-14 sm:w-14";
   const nameSize =
     size === "lg" ? "text-2xl" : size === "sm" ? "text-base" : "text-lg";
   const logoUrl = settings?.logo_url || "/watch-logo.png";

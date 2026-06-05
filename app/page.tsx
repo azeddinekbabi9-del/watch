@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProductCard } from "@/components/store/ProductCard";
 import { getCategories, getProducts, getStoreSettings } from "@/lib/data";
+import { createWhatsAppUrl } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,10 @@ export default async function HomePage() {
               </Link>
               {settings.admin_whatsapp_phone ? (
                 <Link
-                  href={`https://wa.me/${settings.admin_whatsapp_phone.replace(/[^\d]/g, "")}`}
+                  href={createWhatsAppUrl(
+                    settings.admin_whatsapp_phone,
+                    "Hello, I want to ask about your products."
+                  )}
                   target="_blank"
                   rel="noreferrer"
                   className={buttonVariants({

@@ -1,6 +1,6 @@
 import type { ProductWithCategory } from "@/types/database";
 
-export const cartStorageKey = "cloudflare-supabase-store-cart";
+export const cartStorageKey = "watch-store-cart";
 
 export interface CartItem {
   id: string;

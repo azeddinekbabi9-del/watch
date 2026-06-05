@@ -164,12 +164,13 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 Deployment settings:
 
-- Build command: `npm run cf:build`
+- Build command: `npm install --legacy-peer-deps && npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion`
+- Deploy command: `npx opennextjs-cloudflare deploy`
 - Output/assets directory: `.open-next/assets`
 - Worker entry: `.open-next/worker.js`
-- Compatibility flags: `nodejs_compat`, `global_fetch_strictly_public`
+- Compatibility flags: `nodejs_compat`
 - Static assets binding: `ASSETS`
-- Service binding: `WORKER_SELF_REFERENCE` pointing to `cloudflare-supabase-store`
+- Service binding: `WORKER_SELF_REFERENCE` pointing to `watch`
 
 The app avoids direct Node.js server-only APIs. It uses Next.js runtime APIs, Supabase public anon key access, and browser-side admin CRUD through the authenticated Supabase session.
 

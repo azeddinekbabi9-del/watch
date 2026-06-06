@@ -19,24 +19,33 @@ export default async function ProductsPage({
   ]);
 
   return (
-    <section className="container-page page-transition py-10">
-      <div className="hero-reveal mb-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Catalog
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold text-ink md:text-5xl">
-          Watch collection
-        </h1>
+    <section className="page-transition">
+      <div className="luxury-dark-surface border-b border-gold/20 py-10 text-cream sm:py-12 md:py-16">
+        <div className="container-page hero-reveal mx-auto max-w-3xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-gold">
+            Catalog
+          </p>
+          <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-cream sm:text-5xl md:text-6xl">
+            Watch collection
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-cream/68 md:text-base">
+            Explore refined pieces with direct ordering, clear availability, and
+            personal confirmation.
+          </p>
+          <div className="gold-divider mx-auto mt-6 w-36" />
+        </div>
       </div>
 
-      <div className="luxury-reveal mb-7 flex gap-2 overflow-x-auto pb-2">
+      <div className="container-page py-8 sm:py-10">
+
+      <div className="luxury-reveal mb-8 flex gap-2 overflow-x-auto rounded-md border border-gold/15 bg-white/78 p-2 shadow-soft">
         <Link
           href="/products"
           className={cn(
-            "rounded-md border px-4 py-2 text-sm font-semibold transition-all duration-300",
+            "whitespace-nowrap rounded-md border px-4 py-2 text-sm font-semibold transition-all duration-300",
             !categorySlug
-              ? "border-gold bg-gold text-cream"
-              : "border-ink/10 bg-cream text-ink/65 hover:border-gold/60 hover:text-ink"
+              ? "border-gold bg-gold-sheen text-ink shadow-sm"
+              : "border-gold/20 bg-cream text-ink/65 hover:border-gold/60 hover:text-ink"
           )}
         >
           All
@@ -48,8 +57,8 @@ export default async function ProductsPage({
             className={cn(
               "whitespace-nowrap rounded-md border px-4 py-2 text-sm font-semibold transition-all duration-300",
               categorySlug === category.slug
-                ? "border-gold bg-gold text-cream"
-                : "border-ink/10 bg-cream text-ink/65 hover:border-gold/60 hover:text-ink"
+                ? "border-gold bg-gold-sheen text-ink shadow-sm"
+                : "border-gold/20 bg-cream text-ink/65 hover:border-gold/60 hover:text-ink"
             )}
           >
             {category.name}
@@ -58,7 +67,7 @@ export default async function ProductsPage({
       </div>
 
       {products.length > 0 ? (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {products.map((product, index) => (
             <ProductCard
               key={product.id}
@@ -74,6 +83,7 @@ export default async function ProductsPage({
           description="Try another category or add active products from the admin dashboard."
         />
       )}
+      </div>
     </section>
   );
 }

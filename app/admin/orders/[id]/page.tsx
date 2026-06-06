@@ -54,14 +54,14 @@ export default async function OrderDetailsPage({
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
             Order
           </p>
-          <h2 className="mt-2 text-3xl font-bold text-ink">
+          <h2 className="mt-2 break-words text-3xl font-bold text-ink">
             {order.customer_name}
           </h2>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           <Link
             href={`tel:${order.customer_phone}`}
-            className={buttonVariants({ variant: "outline" })}
+            className={buttonVariants({ variant: "outline", className: "w-full sm:w-auto" })}
           >
             <Phone className="h-4 w-4" />
             Call
@@ -73,17 +73,17 @@ export default async function OrderDetailsPage({
             )}
             target="_blank"
             rel="noreferrer"
-            className={buttonVariants({ variant: "secondary" })}
+            className={buttonVariants({ variant: "secondary", className: "w-full sm:w-auto" })}
           >
             <MessageCircle className="h-4 w-4" />
             WhatsApp
           </Link>
-          <OrderDeleteButton orderId={order.id} />
+          <OrderDeleteButton orderId={order.id} className="w-full sm:w-auto" />
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="rounded-md border border-ink/10 bg-white p-5 shadow-sm">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="min-w-0 rounded-md border border-gold/20 bg-white/92 p-4 shadow-sm sm:p-5">
           <h3 className="text-lg font-bold text-ink">Order items</h3>
           <div className="mt-5 divide-y divide-ink/10">
             {order.order_items.map((item) => (
@@ -91,14 +91,14 @@ export default async function OrderDetailsPage({
                 key={item.id}
                 className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0"
               >
-                <div>
-                  <p className="font-semibold text-ink">{item.product_name}</p>
+                <div className="min-w-0">
+                  <p className="break-words font-semibold text-ink">{item.product_name}</p>
                   <p className="mt-1 text-sm text-ink/55">
                     {item.quantity} x{" "}
                     {formatPrice(Number(item.unit_price), settings.currency)}
                   </p>
                 </div>
-                <p className="font-bold text-ink">
+                <p className="shrink-0 whitespace-nowrap font-bold text-ink">
                   {formatPrice(Number(item.total_price), settings.currency)}
                 </p>
               </div>
@@ -106,7 +106,7 @@ export default async function OrderDetailsPage({
           </div>
         </div>
 
-        <aside className="h-fit rounded-md border border-ink/10 bg-white p-5 shadow-sm">
+        <aside className="h-fit rounded-md border border-gold/20 bg-white/92 p-4 shadow-sm sm:p-5">
           <h3 className="text-lg font-bold text-ink">Customer</h3>
           <dl className="mt-4 space-y-3 text-sm">
             <div>
@@ -134,7 +134,7 @@ export default async function OrderDetailsPage({
               <Badge tone={statusTone(order.status)}>{order.status}</Badge>
             </div>
             <OrderStatusSelect orderId={order.id} status={order.status} />
-            <div className="mt-5 flex justify-between text-lg font-bold text-ink">
+            <div className="mt-5 flex flex-wrap justify-between gap-2 text-lg font-bold text-ink">
               <span>Total</span>
               <span>{formatPrice(Number(order.total_amount), settings.currency)}</span>
             </div>

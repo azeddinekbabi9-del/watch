@@ -31,24 +31,24 @@ export function SiteHeader({
 
   const nav = (
     <>
-      <Link href="/" className="text-sm font-medium text-ink/70 transition-colors duration-300 hover:text-gold">
+      <Link href="/" className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm">
         Home
       </Link>
       <Link
         href="/products"
-        className="text-sm font-medium text-ink/70 transition-colors duration-300 hover:text-gold"
+        className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm"
       >
         Products
       </Link>
       <Link
         href="/#categories"
-        className="text-sm font-medium text-ink/70 transition-colors duration-300 hover:text-gold"
+        className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm"
       >
         Categories
       </Link>
       <Link
         href="/track-order"
-        className="text-sm font-medium text-ink/70 transition-colors duration-300 hover:text-gold"
+        className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm"
       >
         Track Order
       </Link>
@@ -56,20 +56,20 @@ export function SiteHeader({
   );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gold/15 bg-cream/92 shadow-[0_10px_35px_rgba(17,16,14,0.06)] backdrop-blur-xl transition-all duration-500">
-      <div className="container-page flex h-[72px] items-center justify-between py-3">
-        <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Home">
-          <Logo settings={settings} size="md" />
+    <header className="sticky top-0 z-40 border-b border-gold/20 bg-ink/94 shadow-[0_18px_42px_rgba(0,0,0,0.26)] backdrop-blur-xl transition-all duration-500">
+      <div className="container-page flex h-[68px] items-center justify-between gap-3 py-2 sm:h-[72px] sm:py-3">
+        <Link href="/" className="flex min-w-0 flex-1 items-center gap-3 md:flex-none" aria-label="Home">
+          <Logo settings={settings} size="md" textClassName="text-cream" />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">{nav}</nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Button
             type="button"
             variant="outline"
             size="icon"
-            className="bg-white/70"
+            className="border-gold/35 bg-white/8 text-cream hover:bg-gold/15"
             aria-label="Search products"
             onClick={() => setSearchOpen(true)}
           >
@@ -78,7 +78,7 @@ export function SiteHeader({
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="text-cream hover:bg-gold/15 md:hidden"
             onClick={() => setOpen((value) => !value)}
             aria-label="Toggle navigation"
           >
@@ -88,29 +88,30 @@ export function SiteHeader({
       </div>
 
       {open ? (
-        <nav className="animate-slide-up border-t border-gold/15 bg-cream px-4 py-4 md:hidden">
+        <nav className="animate-slide-up border-t border-gold/15 bg-ink px-4 py-4 md:hidden">
           <div className="container-page flex flex-col gap-4">{nav}</div>
         </nav>
       ) : null}
 
       {searchOpen ? (
-        <div className="fixed inset-0 z-50 bg-ink/55 px-4 py-6 backdrop-blur-sm">
-          <div className="mx-auto max-w-2xl animate-slide-up rounded-md border border-gold/20 bg-cream p-4 shadow-luxury">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-ink/70 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6">
+          <div className="mx-auto max-w-2xl animate-slide-up rounded-md border border-gold/25 bg-ink p-3 text-cream shadow-luxury sm:p-4">
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
-                <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-ink/45" />
+                <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-gold" />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   autoFocus
                   placeholder="Search watches by name"
-                  className="focus-ring h-11 w-full rounded-md border border-gold/20 bg-white pl-9 pr-3 text-sm text-ink placeholder:text-ink/40"
+                  className="focus-ring h-12 w-full rounded-md border border-gold/25 bg-white pl-9 pr-3 text-base text-ink placeholder:text-ink/40 md:h-11 md:text-sm"
                 />
               </div>
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
+                className="text-cream hover:bg-gold/15"
                 onClick={() => {
                   setSearchOpen(false);
                   setQuery("");
@@ -121,9 +122,9 @@ export function SiteHeader({
               </Button>
             </div>
 
-            <div className="mt-4 max-h-[70vh] overflow-y-auto">
+            <div className="mt-4 max-h-[70svh] overflow-y-auto">
               {query.trim() && results.length === 0 ? (
-                <p className="rounded-md border border-dashed border-gold/30 p-6 text-center text-sm text-ink/60">
+                <p className="rounded-md border border-dashed border-gold/30 p-6 text-center text-sm text-cream/62">
                   No product found.
                 </p>
               ) : null}
@@ -136,7 +137,7 @@ export function SiteHeader({
                       setSearchOpen(false);
                       setQuery("");
                     }}
-                    className="luxury-card-hover grid grid-cols-[72px_1fr_auto] items-center gap-3 rounded-md border border-gold/15 bg-white p-3"
+                    className="luxury-card-hover grid grid-cols-[64px_1fr] items-center gap-3 rounded-md border border-gold/20 bg-white/8 p-3 sm:grid-cols-[72px_1fr_auto]"
                   >
                     <img
                       src={product.image_url || productImageFallback}
@@ -144,8 +145,8 @@ export function SiteHeader({
                       className="h-16 w-16 rounded-md object-cover"
                     />
                     <div className="min-w-0">
-                      <p className="truncate font-semibold text-ink">{product.name}</p>
-                      <p className="mt-1 text-sm text-ink/60">
+                      <p className="truncate font-semibold text-cream">{product.name}</p>
+                      <p className="mt-1 text-sm text-cream/60">
                         {formatPrice(product.price, settings.currency)}
                       </p>
                     </div>

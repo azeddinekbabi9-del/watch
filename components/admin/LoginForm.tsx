@@ -48,7 +48,7 @@ export function LoginForm() {
   return (
     <form
       onSubmit={login}
-      className="w-full max-w-md rounded-md border border-gold/20 bg-cream p-6 shadow-luxury"
+      className="w-full max-w-md rounded-md border border-gold/25 bg-cream/96 p-6 shadow-luxury"
     >
       <div className="mb-6">
         <div className="mb-5">

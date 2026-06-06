@@ -25,17 +25,17 @@ export default async function AdminProductsPage() {
         </div>
         <Link
           href="/admin/products/new"
-          className={buttonVariants({ variant: "primary" })}
+          className={buttonVariants({ variant: "primary", className: "w-full sm:w-auto" })}
         >
           <Plus className="h-4 w-4" />
           New product
         </Link>
       </div>
 
-      <div className="overflow-hidden rounded-md border border-ink/10 bg-white shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px] text-left text-sm">
-            <thead className="bg-ink/5 text-xs uppercase tracking-[0.12em] text-ink/55">
+      <div className="w-full max-w-full overflow-hidden rounded-md border border-gold/20 bg-white/92 shadow-sm">
+        <div className="overflow-x-auto overscroll-x-contain">
+          <table className="w-full min-w-[760px] text-left text-sm md:min-w-[900px]">
+            <thead className="bg-gold/10 text-xs uppercase tracking-[0.12em] text-ink/55">
               <tr>
                 <th className="px-4 py-3">Product</th>
                 <th className="px-4 py-3">Category</th>
@@ -53,10 +53,10 @@ export default async function AdminProductsPage() {
                       <img
                         src={product.image_url || productImageFallback}
                         alt={product.name}
-                        className="h-12 w-12 rounded-md object-cover"
+                        className="h-12 w-12 shrink-0 rounded-md object-cover"
                       />
-                      <div>
-                        <p className="font-bold text-ink">{product.name}</p>
+                      <div className="min-w-0">
+                        <p className="break-words font-bold text-ink">{product.name}</p>
                         <p className="text-xs text-ink/50">/{product.slug}</p>
                       </div>
                     </div>

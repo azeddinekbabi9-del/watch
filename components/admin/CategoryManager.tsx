@@ -90,10 +90,10 @@ const request = editing
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
+    <div className="grid gap-6 lg:grid-cols-[minmax(280px,420px)_minmax(0,1fr)]">
       <form
         onSubmit={save}
-        className="h-fit rounded-md border border-ink/10 bg-white p-5 shadow-sm"
+        className="h-fit rounded-md border border-gold/20 bg-white/92 p-4 shadow-sm sm:p-5"
       >
         <h2 className="text-lg font-bold text-ink">
           {editing ? "Edit category" : "New category"}
@@ -162,7 +162,7 @@ const request = editing
           </p>
         ) : null}
 
-        <div className="mt-5 flex gap-2">
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row">
           <Button type="submit" disabled={saving}>
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save
@@ -180,11 +180,11 @@ const request = editing
         </div>
       </form>
 
-      <div className="overflow-hidden rounded-md border border-ink/10 bg-white shadow-sm">
-        <div className="border-b border-ink/10 p-4">
+      <div className="min-w-0 overflow-hidden rounded-md border border-gold/20 bg-white/92 shadow-sm">
+        <div className="border-b border-gold/15 bg-gold/10 p-4">
           <h2 className="text-lg font-bold text-ink">Categories</h2>
         </div>
-        <div className="divide-y divide-ink/10">
+        <div className="divide-y divide-gold/15">
           {categories.map((category) => (
             <div
               key={category.id}
@@ -197,12 +197,12 @@ const request = editing
                   {category.is_active ? "Visible" : "Hidden"}
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Button type="button" variant="outline" size="sm" onClick={() => edit(category)}>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => edit(category)}>
                   <Edit3 className="h-4 w-4" />
                   Edit
                 </Button>
-                <Button type="button" variant="danger" size="sm" onClick={() => remove(category.id)}>
+                <Button type="button" variant="danger" size="sm" className="flex-1 sm:flex-none" onClick={() => remove(category.id)}>
                   <Trash2 className="h-4 w-4" />
                   Delete
                 </Button>

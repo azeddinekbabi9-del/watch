@@ -43,28 +43,32 @@ export default async function ProductDetailsPage({
   ];
 
   return (
-    <section className="container-page page-transition py-10">
-      <Link
-        href="/products"
-        className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-gold transition-colors duration-300 hover:text-ink"
-      >
-        <ChevronLeft className="h-4 w-4" aria-hidden />
-        Back to products
-      </Link>
+    <section className="page-transition">
+      <div className="luxury-dark-surface border-b border-gold/20 py-6">
+        <div className="container-page">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-gold transition-colors duration-300 hover:text-cream"
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden />
+            Back to products
+          </Link>
+        </div>
+      </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-        <div className="space-y-5">
+      <div className="container-page grid gap-6 py-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.9fr)] lg:gap-8">
+        <div className="min-w-0 space-y-5">
           <ProductGallery
             productName={product.name}
             image={product.image_url}
             gallery={product.gallery_images}
           />
 
-          <section className="luxury-reveal rounded-md border border-gold/15 bg-white p-5 shadow-soft md:p-6">
+          <section className="luxury-reveal rounded-md border border-gold/20 bg-white/92 p-4 shadow-soft sm:p-5 md:p-6">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
               Product Information
             </p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink">
+            <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">
               Details and benefits
             </h2>
             {product.description ? (
@@ -85,7 +89,7 @@ export default async function ProductDetailsPage({
                 return (
                   <div
                     key={benefit.title}
-                    className="rounded-md border border-gold/15 bg-cream p-4"
+                    className="rounded-md border border-gold/20 bg-luxury-surface p-4 shadow-sm"
                   >
                     <Icon className="h-5 w-5 text-gold" aria-hidden />
                     <h3 className="mt-3 text-sm font-semibold text-ink">
@@ -101,7 +105,7 @@ export default async function ProductDetailsPage({
           </section>
         </div>
 
-        <div className="luxury-reveal rounded-md border border-gold/15 bg-cream p-5 shadow-soft md:p-7">
+        <div className="luxury-reveal min-w-0 rounded-md border border-gold/25 bg-ink p-4 text-cream shadow-luxury sm:p-5 md:p-7">
           <div className="mb-4 flex flex-wrap items-center gap-2">
             {product.categories ? (
               <Badge tone="neutral">{product.categories.name}</Badge>
@@ -111,19 +115,19 @@ export default async function ProductDetailsPage({
             </Badge>
           </div>
 
-          <h1 className="text-3xl font-semibold text-ink md:text-5xl">{product.name}</h1>
-          <div className="mt-4 flex items-baseline gap-3">
-            <span className="text-3xl font-bold text-ink">
+          <h1 className="break-words text-3xl font-semibold tracking-[-0.04em] text-cream md:text-5xl">{product.name}</h1>
+          <div className="mt-4 flex flex-wrap items-baseline gap-3">
+            <span className="text-2xl font-bold text-gold sm:text-3xl">
               {formatPrice(product.price, settings.currency)}
             </span>
             {product.old_price ? (
-              <span className="text-lg text-ink/45 line-through">
+              <span className="text-lg text-cream/45 line-through">
                 {formatPrice(product.old_price, settings.currency)}
               </span>
             ) : null}
           </div>
 
-          <p className="mt-5 text-sm leading-7 text-ink/65">
+          <p className="mt-5 text-sm leading-7 text-cream/65">
             Complete the direct order form below. We will confirm availability and
             delivery details with you shortly.
           </p>

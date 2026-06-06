@@ -23,10 +23,10 @@ export default async function AdminCustomersPage() {
       </div>
 
       {customers.length > 0 ? (
-        <div className="overflow-hidden rounded-md border border-gold/15 bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[850px] text-left text-sm">
-              <thead className="bg-ink/5 text-xs uppercase tracking-[0.12em] text-ink/55">
+        <div className="w-full max-w-full overflow-hidden rounded-md border border-gold/20 bg-white/92 shadow-sm">
+          <div className="overflow-x-auto overscroll-x-contain">
+            <table className="w-full min-w-[760px] text-left text-sm md:min-w-[850px]">
+              <thead className="bg-gold/10 text-xs uppercase tracking-[0.12em] text-ink/55">
                 <tr>
                   <th className="px-4 py-3">Customer</th>
                   <th className="px-4 py-3">Phone</th>

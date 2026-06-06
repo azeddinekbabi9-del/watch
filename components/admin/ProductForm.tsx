@@ -89,7 +89,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
   return (
     <form
       onSubmit={save}
-      className="max-w-4xl rounded-md border border-ink/10 bg-white p-5 shadow-sm"
+      className="w-full max-w-4xl rounded-md border border-gold/20 bg-white/92 p-4 shadow-sm sm:p-5"
     >
       <div className="grid gap-4 md:grid-cols-2">
         <label className="space-y-2">

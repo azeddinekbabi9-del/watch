@@ -5,7 +5,13 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 
-export function OrderDeleteButton({ orderId }: { orderId: string }) {
+export function OrderDeleteButton({
+  orderId,
+  className
+}: {
+  orderId: string;
+  className?: string;
+}) {
   const router = useRouter();
 
   async function remove() {
@@ -20,7 +26,7 @@ export function OrderDeleteButton({ orderId }: { orderId: string }) {
   }
 
   return (
-    <Button type="button" variant="danger" onClick={remove}>
+    <Button type="button" variant="danger" className={className} onClick={remove}>
       <Trash2 className="h-4 w-4" aria-hidden />
       Delete order
     </Button>

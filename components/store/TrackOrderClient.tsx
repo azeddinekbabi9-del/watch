@@ -146,23 +146,26 @@ export function TrackOrderClient({
     : "";
 
   return (
-    <section className="container-page page-transition py-10">
-      <div className="hero-reveal mb-8 max-w-2xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Track Order
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold text-ink md:text-5xl">
-          Follow your timepiece
-        </h1>
-        <p className="mt-4 text-sm leading-7 text-ink/65">
-          Choose one tracking method, then enter the matching detail from your order.
-        </p>
+    <section className="page-transition">
+      <div className="luxury-dark-surface border-b border-gold/20 py-10 text-cream sm:py-12 md:py-16">
+        <div className="container-page hero-reveal mx-auto max-w-3xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-gold">
+            Track Order
+          </p>
+          <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-cream sm:text-5xl md:text-6xl">
+            Follow your timepiece
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-cream/68 md:text-base">
+            Choose one tracking method, then enter the matching detail from your order.
+          </p>
+          <div className="gold-divider mx-auto mt-6 w-36" />
+        </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[420px_1fr]">
+      <div className="container-page grid gap-6 py-8 sm:py-10 lg:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
         <form
           onSubmit={track}
-          className="luxury-reveal h-fit rounded-md border border-gold/20 bg-cream p-5 shadow-soft"
+          className="luxury-reveal h-fit rounded-md border border-gold/25 bg-ink p-4 text-cream shadow-luxury sm:p-5"
         >
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
             {[
@@ -190,15 +193,15 @@ export function TrackOrderClient({
                   className={cn(
                     "focus-ring rounded-md border p-4 text-left transition-all duration-300",
                     active
-                      ? "border-gold bg-white shadow-soft"
-                      : "border-gold/15 bg-white/50 hover:border-gold/45"
+                      ? "border-gold bg-gold-sheen text-ink shadow-soft"
+                      : "border-gold/20 bg-white/6 text-cream hover:border-gold/60 hover:bg-white/10"
                   )}
                 >
-                  <span className="flex items-center gap-2 text-sm font-bold text-ink">
-                    <Icon className="h-4 w-4 text-gold" aria-hidden />
+                  <span className="flex items-center gap-2 text-sm font-bold">
+                    <Icon className={cn("h-4 w-4", active ? "text-ink" : "text-gold")} aria-hidden />
                     {option.label}
                   </span>
-                  <span className="mt-2 block text-xs leading-5 text-ink/55">
+                  <span className={cn("mt-2 block text-xs leading-5", active ? "text-ink/65" : "text-cream/58")}>
                     {option.description}
                   </span>
                 </button>
@@ -209,7 +212,7 @@ export function TrackOrderClient({
           <div className="mt-5 space-y-4">
             {mode === "phone" ? (
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-ink">Phone number</span>
+                <span className="text-sm font-semibold text-cream">Phone number</span>
                 <Input
                   value={phone}
                   onChange={(event) => setPhone(event.target.value)}
@@ -219,7 +222,7 @@ export function TrackOrderClient({
               </label>
             ) : (
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-ink">Order ID</span>
+                <span className="text-sm font-semibold text-cream">Order ID</span>
                 <Input
                   value={orderId}
                   onChange={(event) => setOrderId(event.target.value)}
@@ -230,7 +233,7 @@ export function TrackOrderClient({
           </div>
 
           {error ? (
-            <div className="mt-4 rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
+            <div className="mt-4 break-words rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
               <p>{error}</p>
               {(error === "Order not found." ||
                 error === "No orders were found for that phone number.") &&
@@ -262,7 +265,7 @@ export function TrackOrderClient({
               return (
                 <article
                   key={result.id}
-                  className="luxury-reveal rounded-md border border-gold/20 bg-white p-5 shadow-soft"
+                  className="luxury-reveal rounded-md border border-gold/20 bg-white/94 p-5 shadow-soft"
                 >
                   <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                     <div>
@@ -278,7 +281,7 @@ export function TrackOrderClient({
                   </div>
 
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-md bg-cloud p-4">
+                    <div className="rounded-md border border-gold/15 bg-luxury-surface p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">
                         Customer
                       </p>
@@ -291,7 +294,7 @@ export function TrackOrderClient({
                         <p className="text-sm text-ink/60">{result.customer_address}</p>
                       ) : null}
                     </div>
-                    <div className="rounded-md bg-cloud p-4">
+                    <div className="rounded-md border border-gold/15 bg-luxury-surface p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">
                         Total
                       </p>
@@ -301,19 +304,19 @@ export function TrackOrderClient({
                     </div>
                   </div>
 
-                  <div className="mt-6 divide-y divide-ink/10">
+                  <div className="mt-6 divide-y divide-gold/15">
                     {items.map((item) => (
                       <div
                         key={`${result.id}-${item.product_name}-${item.quantity}`}
                         className="flex items-start justify-between gap-4 py-3"
                       >
-                        <div>
-                          <p className="font-semibold text-ink">{item.product_name}</p>
+                        <div className="min-w-0">
+                          <p className="break-words font-semibold text-ink">{item.product_name}</p>
                           <p className="text-sm text-ink/55">
                             Quantity: {item.quantity}
                           </p>
                         </div>
-                        <p className="font-semibold text-ink">
+                        <p className="shrink-0 whitespace-nowrap font-semibold text-ink">
                           {formatPrice(item.total_price, currency)}
                         </p>
                       </div>
@@ -327,7 +330,7 @@ export function TrackOrderClient({
           <EmptyState
             title="Order status will appear here"
             description="Your order details stay private. We only show matching orders for the order ID or phone number you enter."
-            className="luxury-reveal bg-cream"
+            className="luxury-reveal bg-white/88 shadow-soft"
           />
         )}
       </div>

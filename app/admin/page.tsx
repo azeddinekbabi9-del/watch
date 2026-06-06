@@ -74,7 +74,7 @@ export default async function AdminDashboardPage() {
           return (
             <div
               key={card.label}
-              className="luxury-card-hover animate-slide-up rounded-md border border-gold/15 bg-white p-5 shadow-sm"
+              className="luxury-card-hover animate-slide-up rounded-md border border-gold/20 bg-white/92 p-5 shadow-sm"
             >
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold text-ink/55">{card.label}</p>
@@ -87,7 +87,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-4">
-        <div className="luxury-card-hover rounded-md border border-gold/15 bg-white p-5 shadow-sm">
+        <div className="luxury-card-hover rounded-md border border-gold/20 bg-white/92 p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <h3 className="text-lg font-bold text-ink">Recent orders</h3>
             <Link

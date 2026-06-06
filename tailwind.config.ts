@@ -18,7 +18,8 @@ const config: Config = {
         cream: "#fffaf1",
         sand: "#e7d3b7",
         gold: "#b88945",
-        champagne: "#f3dfb7"
+        champagne: "#f3dfb7",
+        charcoal: "#171512"
       },
       boxShadow: {
         soft: "0 18px 45px rgba(17, 16, 14, 0.12)",
@@ -55,13 +56,25 @@ const config: Config = {
         shimmer: "shimmer 1.8s ease-in-out infinite"
       },
       opacity: {
+        6: "0.06",
+        8: "0.08",
         15: "0.15",
         35: "0.35",
+        42: "0.42",
         45: "0.45",
+        48: "0.48",
         55: "0.55",
+        58: "0.58",
+        62: "0.62",
         65: "0.65",
         68: "0.68",
-        85: "0.85"
+        76: "0.76",
+        78: "0.78",
+        84: "0.84",
+        85: "0.85",
+        88: "0.88",
+        94: "0.94",
+        96: "0.96"
       }
     }
   },

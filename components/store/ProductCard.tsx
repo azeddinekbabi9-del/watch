@@ -21,18 +21,19 @@ export function ProductCard({
   return (
     <article
       style={style}
-      className="luxury-card-hover animate-slide-up group overflow-hidden rounded-md border border-gold/15 bg-cream shadow-sm"
+      className="luxury-card-hover animate-slide-up group overflow-hidden rounded-md border border-gold/20 bg-ink text-cream shadow-soft"
     >
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="aspect-[4/3] overflow-hidden bg-mint">
+        <div className="relative aspect-square overflow-hidden bg-charcoal">
           <img
             src={product.image_url || productImageFallback}
             alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.045]"
+            className="h-full w-full object-cover opacity-94 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/58 via-transparent to-transparent opacity-80" />
         </div>
       </Link>
-      <div className="p-4">
+      <div className="p-4 sm:p-5">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           {product.categories ? (
             <Badge tone="neutral">{product.categories.name}</Badge>
@@ -42,16 +43,16 @@ export function ProductCard({
           </Badge>
         </div>
         <Link href={`/products/${product.slug}`}>
-          <h3 className="line-clamp-2 min-h-12 text-base font-bold leading-6 text-ink">
+          <h3 className="line-clamp-2 min-h-12 break-words text-base font-bold leading-6 text-cream transition-colors duration-300 group-hover:text-gold">
             {product.name}
           </h3>
         </Link>
         <div className="mt-3 flex items-baseline gap-2">
-          <span className="text-lg font-bold text-ink">
+          <span className="text-xl font-bold text-gold">
             {formatPrice(product.price, currency)}
           </span>
           {product.old_price ? (
-            <span className="text-sm text-ink/45 line-through">
+            <span className="text-sm text-cream/42 line-through">
               {formatPrice(product.old_price, currency)}
             </span>
           ) : null}

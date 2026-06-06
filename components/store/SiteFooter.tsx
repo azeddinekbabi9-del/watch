@@ -5,8 +5,8 @@ import type { StoreSettings } from "@/types/database";
 
 export function SiteFooter({ settings }: { settings: StoreSettings }) {
   return (
-    <footer className="border-t border-gold/15 bg-ink text-cream">
-      <div className="container-page grid gap-8 py-10 md:grid-cols-[1.4fr_1fr_1fr]">
+    <footer className="luxury-dark-surface border-t border-gold/20 text-cream">
+      <div className="container-page grid gap-8 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Logo settings={settings} size="sm" textClassName="text-cream" />
           <p className="mt-4 max-w-md text-sm leading-6 text-cream/65">
@@ -23,14 +23,14 @@ export function SiteFooter({ settings }: { settings: StoreSettings }) {
           ) : null}
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-gold">Shop</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Shop</h3>
           <div className="mt-3 flex flex-col gap-2 text-sm text-cream/65">
-            <Link href="/products">All products</Link>
-            <Link href="/track-order">Track Order</Link>
+            <Link href="/products" className="transition-colors duration-300 hover:text-gold">All products</Link>
+            <Link href="/track-order" className="transition-colors duration-300 hover:text-gold">Track Order</Link>
           </div>
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-gold">Social</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Social</h3>
           <div className="mt-3 flex items-center gap-2">
             {settings.facebook_url ? (
               <Link

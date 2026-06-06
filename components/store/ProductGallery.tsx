@@ -17,11 +17,11 @@ export function ProductGallery({
 
   return (
     <div className="luxury-reveal space-y-3">
-      <div className="group aspect-[4/3] overflow-hidden rounded-md bg-mint shadow-soft">
+      <div className="group aspect-square overflow-hidden rounded-md border border-gold/25 bg-ink p-2 shadow-luxury md:aspect-[4/3]">
         <img
           src={active}
           alt={productName}
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+          className="h-full w-full rounded-[0.35rem] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
         />
       </div>
       {images.length > 1 ? (
@@ -31,7 +31,7 @@ export function ProductGallery({
               key={item}
               type="button"
               onClick={() => setActive(item)}
-              className="focus-ring aspect-square overflow-hidden rounded-md border border-gold/15 bg-white transition-all duration-300 hover:border-gold"
+              className="focus-ring aspect-square overflow-hidden rounded-md border border-gold/25 bg-ink p-1 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold hover:shadow-soft"
               aria-label={`Show ${productName} image`}
             >
               <img

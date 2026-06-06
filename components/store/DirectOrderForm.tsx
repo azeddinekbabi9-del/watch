@@ -194,7 +194,7 @@ export function DirectOrderForm({
   }
 
   return (
-    <form onSubmit={submit} className="mt-7 rounded-md border border-gold/20 bg-white p-5">
+    <form onSubmit={submit} className="mt-7 rounded-md border border-gold/25 bg-cream/96 p-4 text-ink shadow-soft sm:p-5">
       <div className="mb-5">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
           Direct Order
@@ -208,6 +208,7 @@ export function DirectOrderForm({
         <label className="space-y-2">
           <span className="text-sm font-semibold text-ink">Full name</span>
           <Input
+            autoComplete="name"
             value={form.customer_name}
             onChange={(event) => update("customer_name", event.target.value)}
             required
@@ -216,6 +217,9 @@ export function DirectOrderForm({
         <label className="space-y-2">
           <span className="text-sm font-semibold text-ink">Phone number</span>
           <Input
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
             value={form.customer_phone}
             onChange={(event) => update("customer_phone", event.target.value)}
             required
@@ -224,6 +228,7 @@ export function DirectOrderForm({
         <label className="space-y-2">
           <span className="text-sm font-semibold text-ink">City</span>
           <Input
+            autoComplete="address-level2"
             value={form.customer_city}
             onChange={(event) => update("customer_city", event.target.value)}
             required
@@ -231,7 +236,7 @@ export function DirectOrderForm({
         </label>
         <div>
           <span className="text-sm font-semibold text-ink">Quantity</span>
-          <div className="mt-2 flex w-fit items-center rounded-md border border-ink/15 bg-cream">
+          <div className="mt-2 flex w-fit items-center rounded-md border border-gold/25 bg-white shadow-sm">
             <Button
               type="button"
               variant="ghost"
@@ -258,6 +263,7 @@ export function DirectOrderForm({
         <label className="space-y-2 sm:col-span-2">
           <span className="text-sm font-semibold text-ink">Address</span>
           <Input
+            autoComplete="street-address"
             value={form.customer_address}
             onChange={(event) => update("customer_address", event.target.value)}
             placeholder="Optional"
@@ -265,7 +271,7 @@ export function DirectOrderForm({
         </label>
       </div>
 
-      <div className="mt-5 flex items-center justify-between rounded-md bg-cloud p-3 text-sm">
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-2 rounded-md border border-gold/20 bg-gold/10 p-3 text-sm">
         <span className="font-semibold text-ink/65">Total</span>
         <span className="text-lg font-bold text-ink">
           {formatPrice(total, settings.currency)}
@@ -273,7 +279,7 @@ export function DirectOrderForm({
       </div>
 
       {error ? (
-        <p className="mt-4 rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
+        <p className="mt-4 break-words rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
           {error}
         </p>
       ) : null}

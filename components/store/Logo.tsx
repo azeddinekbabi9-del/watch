@@ -30,7 +30,7 @@ export function Logo({
         className={`logo-static ${imageSize} shrink-0 object-contain`}
       />
       {showName ? (
-        <span className={`truncate font-semibold tracking-[0.12em] ${nameSize} ${textClassName}`}>
+        <span className={`max-w-[8.5rem] truncate font-semibold tracking-[0.12em] sm:max-w-[14rem] ${nameSize} ${textClassName}`}>
           {storeName}
         </span>
       ) : null}

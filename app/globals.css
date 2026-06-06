@@ -5,9 +5,11 @@
 :root {
   color-scheme: light;
   --store-main: #11100e;
-  --gold: #b88945;
+  --gold: #c99a4a;
+  --gold-deep: #9b6b2f;
   --cream: #fffaf1;
   --sand: #e7d3b7;
+  --charcoal: #171512;
 }
 
 * {
@@ -16,16 +18,28 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
-  background: #fbf7ef;
+  min-height: 100svh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(201, 154, 74, 0.16), transparent 32rem),
+    linear-gradient(180deg, #11100e 0%, #171512 22rem, #fbf7ef 22rem, #fbf7ef 100%);
   color: #11100e;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+img,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
 }
 
 a {
@@ -45,7 +59,7 @@ select {
 }
 
 .container-page {
-  width: min(1160px, calc(100% - 32px));
+  width: min(1160px, calc(100% - clamp(24px, 5vw, 48px)));
   margin-inline: auto;
 }
 
@@ -61,26 +75,76 @@ select {
   animation: fade-in 520ms ease-out both;
 }
 
+.fade-in-up {
+  animation: fade-in-up 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .luxury-reveal {
-  animation: slide-up 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fade-in-up 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .hero-reveal {
   animation: hero-reveal 940ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.luxury-card-hover {
-  transition:
-    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 260ms ease,
-    border-color 260ms ease,
-    background-color 260ms ease;
+.soft-float {
+  animation: soft-float 7s ease-in-out infinite;
 }
 
+.gold-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.gold-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: -35% auto -35% -70%;
+  width: 45%;
+  transform: rotate(18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 250, 241, 0.32),
+    transparent
+  );
+  animation: gold-shimmer 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.luxury-surface {
+  background:
+    radial-gradient(circle at top left, rgba(201, 154, 74, 0.18), transparent 24rem),
+    linear-gradient(135deg, #fffaf1 0%, #fbf7ef 50%, #ead8bc 100%);
+}
+
+.luxury-dark-surface {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(201, 154, 74, 0.28), transparent 28rem),
+    radial-gradient(circle at 80% 20%, rgba(255, 250, 241, 0.08), transparent 18rem),
+    linear-gradient(135deg, #11100e 0%, #171512 55%, #090807 100%);
+}
+
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 154, 74, 0.8), transparent);
+}
+
+.card-hover,
+.luxury-card-hover {
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms ease,
+    border-color 320ms ease,
+    background-color 320ms ease,
+    filter 320ms ease;
+}
+
+.card-hover:hover,
 .luxury-card-hover:hover {
-  transform: translateY(-4px);
-  border-color: rgba(184, 137, 69, 0.42);
-  box-shadow: 0 22px 70px rgba(17, 16, 14, 0.16);
+  transform: translateY(-6px);
+  border-color: rgba(201, 154, 74, 0.68);
+  box-shadow: 0 26px 80px rgba(17, 16, 14, 0.24);
 }
 
 .luxury-button-hover {
@@ -94,8 +158,8 @@ select {
 }
 
 .luxury-button-hover:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(17, 16, 14, 0.16);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 16px 34px rgba(17, 16, 14, 0.22);
 }
 
 .luxury-loading {
@@ -108,6 +172,79 @@ select {
   animation: none !important;
   transform: none !important;
   transition: none !important;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes soft-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes gold-shimmer {
+  0%,
+  55% {
+    transform: translateX(0) rotate(18deg);
+    opacity: 0;
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(340%) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .gold-shimmer::after {
+    animation-duration: 6.5s;
+  }
+
+  .luxury-card-hover:hover,
+  .card-hover:hover {
+    transform: translateY(-2px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

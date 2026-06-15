@@ -4,21 +4,33 @@ import Link from "next/link";
 import { Menu, Search, X } from "lucide-react";
 import * as React from "react";
 import { Button } from "@/components/ui/Button";
+import { PreferenceControls } from "@/components/PreferenceControls";
 import { Logo } from "@/components/store/Logo";
+import { ResponsiveStoreImage } from "@/components/store/ResponsiveStoreImage";
+import type { StoreLanguage, StoreTheme } from "@/lib/preferences";
+import { textFromMap, type StoreTextMap } from "@/lib/store-texts";
 import { formatPrice, productImageFallback } from "@/lib/utils";
 import type { ProductWithCategory, StoreSettings } from "@/types/database";
 
 export function SiteHeader({
   settings,
-  products
+  products,
+  language,
+  theme,
+  texts
 }: {
   settings: StoreSettings;
   products: ProductWithCategory[];
+  language: StoreLanguage;
+  theme: StoreTheme;
+  texts: StoreTextMap;
 }) {
   const [open, setOpen] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const brandSettings = { ...settings, store_name: "WQITAK" };
+  const t = (key: Parameters<typeof textFromMap>[1]) =>
+    textFromMap(texts, key, language);
   const results = React.useMemo(() => {
     const normalized = query.trim().toLowerCase();
     if (!normalized) {
@@ -33,25 +45,25 @@ export function SiteHeader({
   const nav = (
     <>
       <Link href="/" className="rounded-md px-2 py-2 text-base font-semibold text-cream/72 transition-colors duration-300 hover:text-champagne md:px-0 md:py-0 md:text-sm">
-        الرئيسية
+        {t("nav_home")}
       </Link>
       <Link
         href="/products"
         className="rounded-md px-2 py-2 text-base font-semibold text-cream/72 transition-colors duration-300 hover:text-champagne md:px-0 md:py-0 md:text-sm"
       >
-        الساعات
+        {t("nav_products")}
       </Link>
       <Link
         href="/track-order"
         className="rounded-md px-2 py-2 text-base font-semibold text-cream/72 transition-colors duration-300 hover:text-champagne md:px-0 md:py-0 md:text-sm"
       >
-        تتبع الطلب
+        {t("nav_track")}
       </Link>
     </>
   );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gold/20 bg-[#050505]/92 shadow-[0_18px_48px_rgba(0,0,0,0.48)] backdrop-blur-xl transition-all duration-500">
+    <header className="sticky top-0 z-40 border-b border-gold/20 bg-[var(--panel-solid)] shadow-[0_18px_48px_rgba(0,0,0,0.22)] backdrop-blur-xl transition-all duration-500">
       <div className="container-page flex h-[68px] items-center justify-between gap-3 py-2 sm:h-[72px] sm:py-3">
         <Link href="/" className="flex min-w-0 flex-1 items-center gap-3 md:flex-none" aria-label="Home">
           <Logo settings={brandSettings} size="md" textClassName="text-champagne" />
@@ -60,6 +72,9 @@ export function SiteHeader({
         <nav className="hidden items-center gap-7 md:flex">{nav}</nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          <div className="hidden md:block">
+            <PreferenceControls language={language} theme={theme} />
+          </div>
           <Button
             type="button"
             variant="outline"
@@ -83,8 +98,11 @@ export function SiteHeader({
       </div>
 
       {open ? (
-        <nav className="animate-slide-up border-t border-gold/15 bg-[#050505] px-4 py-4 md:hidden">
-          <div className="container-page flex flex-col gap-4">{nav}</div>
+        <nav className="animate-slide-up border-t border-gold/15 bg-[var(--panel-solid)] px-4 py-4 md:hidden">
+          <div className="container-page flex flex-col gap-4">
+            {nav}
+            <PreferenceControls language={language} theme={theme} />
+          </div>
         </nav>
       ) : null}
 
@@ -98,7 +116,7 @@ export function SiteHeader({
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   autoFocus
-                  placeholder="ابحث عن ساعة..."
+                  placeholder={t("search_placeholder")}
                   className="focus-ring h-12 w-full rounded-md border border-gold/25 bg-[#0d0d0d] pl-9 pr-3 text-base text-cream placeholder:text-cream/40 md:h-11 md:text-sm"
                 />
               </div>
@@ -120,7 +138,7 @@ export function SiteHeader({
             <div className="mt-4 max-h-[70svh] overflow-y-auto">
               {query.trim() && results.length === 0 ? (
                 <p className="rounded-md border border-dashed border-gold/30 p-6 text-center text-sm text-cream/62">
-                  لم يتم العثور على أي ساعة بهذا الاسم.
+                  {t("search_empty")}
                 </p>
               ) : null}
               <div className="space-y-3">
@@ -134,9 +152,10 @@ export function SiteHeader({
                     }}
                     className="luxury-card-hover grid grid-cols-[72px_1fr] items-center gap-3 rounded-md border border-gold/20 bg-white/[0.055] p-3 sm:grid-cols-[80px_1fr_auto]"
                   >
-                    <img
+                    <ResponsiveStoreImage
                       src={product.image_url || productImageFallback}
                       alt={product.name}
+                      variant="product"
                       className="h-[72px] w-[72px] rounded-md object-cover sm:h-20 sm:w-20"
                     />
                     <div className="min-w-0">
@@ -146,7 +165,7 @@ export function SiteHeader({
                       </p>
                     </div>
                     <span className="hidden rounded-md border border-champagne/50 bg-gold-sheen px-3 py-2 text-xs font-bold text-ink sm:inline-flex">
-                      Order Now
+                      {t("order_now")}
                     </span>
                   </Link>
                 ))}

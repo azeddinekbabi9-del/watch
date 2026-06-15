@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/store/ProductCard";
-import { getCategories, getProducts, getStoreSettings } from "@/lib/data";
+import { getCategories, getProducts, getStoreSettings, getStoreTexts } from "@/lib/data";
+import { getServerLanguage } from "@/lib/preferences";
+import { textFromMap } from "@/lib/store-texts";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -11,24 +13,28 @@ export default async function ProductsPage({
   searchParams?: { category?: string };
 }) {
   const categorySlug = searchParams?.category;
-  const [settings, categories, products] = await Promise.all([
+  const language = getServerLanguage();
+  const [settings, categories, products, texts] = await Promise.all([
     getStoreSettings(),
     getCategories(true),
-    getProducts({ categorySlug })
+    getProducts({ categorySlug }),
+    getStoreTexts()
   ]);
+  const t = (key: Parameters<typeof textFromMap>[1]) =>
+    textFromMap(texts, key, language);
 
   return (
     <section className="luxury-page page-transition">
       <div className="relative border-b border-gold/20 py-12 text-cream sm:py-14 md:py-16">
         <div className="container-page hero-reveal mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-gold">
-            WQITAK Watches
+            {t("products_eyebrow")}
           </p>
           <h1 className="gold-text mt-3 text-4xl font-semibold tracking-[0.04em] sm:text-5xl md:text-6xl">
-            ساعات فاخرة
+            {t("products_title")}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-cream/68 md:text-base">
-            اختار ساعتك المفضلة واطلب مباشرة مع الدفع عند الاستلام.
+            {t("products_subtitle")}
           </p>
           <div className="gold-divider mx-auto mt-6 w-36" />
         </div>
@@ -46,7 +52,7 @@ export default async function ProductsPage({
                   : "border-gold/20 bg-black/30 text-cream/70 hover:border-gold/60 hover:text-champagne"
               )}
             >
-              كل الساعات
+              {t("products_all")}
             </Link>
             {categories.map((category) => (
               <Link
@@ -73,16 +79,19 @@ export default async function ProductsPage({
                 product={product}
                 currency={settings.currency}
                 index={index}
+                orderLabel={t("order_now")}
+                availableLabel={t("product_available")}
+                outOfStockLabel={t("product_out_of_stock")}
               />
             ))}
           </div>
         ) : (
           <div className="luxury-panel rounded-md p-8 text-center">
             <h2 className="text-xl font-semibold text-cream">
-              لا توجد ساعات متاحة حاليا
+              {t("products_empty_title")}
             </h2>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-cream/62">
-              جرب تصنيف آخر أو أضف منتجات نشطة من لوحة الإدارة.
+              {t("products_empty_description")}
             </p>
           </div>
         )}

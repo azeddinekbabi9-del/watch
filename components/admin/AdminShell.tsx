@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  FileText,
   LayoutDashboard,
   LogOut,
   Package,
@@ -12,9 +13,11 @@ import {
   Users
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { PreferenceControls } from "@/components/PreferenceControls";
 import { Logo } from "@/components/store/Logo";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
+import type { StoreLanguage, StoreTheme } from "@/lib/preferences";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -22,10 +25,19 @@ const navItems = [
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/categories", label: "Categories", icon: Tags },
   { href: "/admin/customers", label: "Customers", icon: Users },
+  { href: "/admin/texts", label: "All Texts", icon: FileText },
   { href: "/admin/settings", label: "Settings", icon: Settings }
 ];
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
+export function AdminShell({
+  children,
+  language,
+  theme
+}: {
+  children: React.ReactNode;
+  language: StoreLanguage;
+  theme: StoreTheme;
+}) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -47,7 +59,7 @@ async function signOut() {
 }
 
   return (
-    <div className="min-h-screen min-h-[100svh] bg-[radial-gradient(circle_at_top_right,rgba(201,154,74,0.16),transparent_26rem),#fbf7ef]">
+    <div className="admin-theme-shell min-h-screen min-h-[100svh]">
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-gold/20 bg-ink p-4 text-cream shadow-[18px_0_60px_rgba(17,16,14,0.22)] lg:block">
         <Link href="/admin" className="block px-2 py-3" aria-label="Admin dashboard">
           <Logo size="sm" textClassName="text-cream" />
@@ -80,13 +92,13 @@ async function signOut() {
       </aside>
 
       <div className="min-w-0 lg:pl-64">
-        <header className="sticky top-0 z-30 border-b border-gold/20 bg-cream/92 shadow-[0_10px_35px_rgba(17,16,14,0.06)] backdrop-blur-xl transition-all duration-500">
+        <header className="admin-theme-header sticky top-0 z-30 border-b shadow-[0_10px_35px_rgba(17,16,14,0.06)] backdrop-blur-xl transition-all duration-500">
           <div className="flex min-h-16 items-center justify-between gap-3 px-3 sm:px-4 lg:px-8">
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">
                 Admin
               </p>
-              <h1 className="truncate text-lg font-bold text-ink">Store manager</h1>
+              <h1 className="truncate text-lg font-bold theme-text">Store manager</h1>
             </div>
             <div className="flex min-w-0 max-w-[72vw] items-center gap-2 overflow-x-auto">
               <div className="flex shrink-0 gap-1 lg:hidden">
@@ -112,6 +124,7 @@ async function signOut() {
                   );
                 })}
               </div>
+              <PreferenceControls language={language} theme={theme} compact />
               <Button type="button" variant="outline" size="sm" className="shrink-0" onClick={signOut}>
                 <LogOut className="h-4 w-4" aria-hidden />
                 Sign out

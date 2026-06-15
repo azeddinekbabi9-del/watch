@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/Input";
 import { getSupabaseConfig } from "@/lib/config";
+import type { StoreLanguage } from "@/lib/preferences";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
+import { textFromMap, type StoreTextMap } from "@/lib/store-texts";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 import { cn, formatPrice } from "@/lib/utils";
 import type { Json, OrderStatus, TrackOrderResult } from "@/types/database";
@@ -21,7 +23,7 @@ const phoneTrackSchema = z.object({
 });
 
 const orderIdTrackSchema = z.object({
-  orderId: z.string().trim().uuid("Enter a valid order ID.")
+  orderId: z.string().trim().min(4, "Enter a valid order ID.")
 });
 
 interface ParsedOrderItem {
@@ -69,11 +71,15 @@ function parseItems(value: Json): ParsedOrderItem[] {
 export function TrackOrderClient({
   initialOrderId,
   currency,
-  adminWhatsappPhone
+  adminWhatsappPhone,
+  language,
+  texts
 }: {
   initialOrderId?: string;
   currency: string;
   adminWhatsappPhone: string;
+  language: StoreLanguage;
+  texts: StoreTextMap;
 }) {
   const [mode, setMode] = React.useState<TrackMode>(
     initialOrderId ? "orderId" : "phone"
@@ -83,6 +89,8 @@ export function TrackOrderClient({
   const [results, setResults] = React.useState<TrackOrderResult[]>([]);
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const t = (key: Parameters<typeof textFromMap>[1]) =>
+    textFromMap(texts, key, language);
 
   function selectMode(nextMode: TrackMode) {
     setMode(nextMode);
@@ -133,8 +141,12 @@ export function TrackOrderClient({
     if (trackedOrders.length === 0) {
       setError(
         mode === "phone"
-          ? "No orders were found for that phone number."
-          : "Order not found."
+          ? language === "ar"
+            ? "لم يتم العثور على طلبات بهذا الرقم."
+            : "No orders were found for that phone number."
+          : language === "ar"
+            ? "لم يتم العثور على الطلب."
+            : "Order not found."
       );
       return;
     }
@@ -150,13 +162,13 @@ export function TrackOrderClient({
       <div className="relative border-b border-gold/20 py-10 text-cream sm:py-12 md:py-16">
         <div className="container-page hero-reveal mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-gold">
-            WQITAK Tracking
+            {t("track_eyebrow")}
           </p>
           <h1 className="gold-text mt-3 text-4xl font-semibold tracking-[-0.03em] text-cream sm:text-5xl md:text-6xl">
-            تتبع طلبك
+            {t("track_title")}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-cream/68 md:text-base">
-            أدخل رقم الهاتف أو Order ID باش تعرف حالة الطلب ديالك.
+            {t("track_subtitle")}
           </p>
           <div className="gold-divider mx-auto mt-6 w-36" />
         </div>
@@ -171,14 +183,20 @@ export function TrackOrderClient({
             {[
               {
                 value: "phone" as const,
-                label: "Phone number",
-                description: "بحث بجميع الطلبات المرتبطة بنفس الهاتف.",
+                label: t("track_phone"),
+                description:
+                  language === "ar"
+                    ? "اعرض الطلبات المرتبطة برقم الهاتف."
+                    : "Show orders linked to this phone number.",
                 icon: Phone
               },
               {
                 value: "orderId" as const,
-                label: "Order ID",
-                description: "بحث عن طلب واحد باستعمال الرمز الكامل.",
+                label: t("track_order_code"),
+                description:
+                  language === "ar"
+                    ? "ابحث باستعمال رقم الطلب مثل WA-0642."
+                    : "Search with an order ID such as WA-0642.",
                 icon: Hash
               }
             ].map((option) => {
@@ -212,7 +230,7 @@ export function TrackOrderClient({
           <div className="mt-5 space-y-4">
             {mode === "phone" ? (
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-cream">Phone number</span>
+                <span className="text-sm font-semibold text-cream">{t("track_phone")}</span>
                 <Input
                   value={phone}
                   onChange={(event) => setPhone(event.target.value)}
@@ -222,11 +240,11 @@ export function TrackOrderClient({
               </label>
             ) : (
               <label className="space-y-2">
-                <span className="text-sm font-semibold text-cream">Order ID</span>
+                <span className="text-sm font-semibold text-cream">{t("track_order_code")}</span>
                 <Input
                   value={orderId}
                   onChange={(event) => setOrderId(event.target.value)}
-                  placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                  placeholder="WA-0642"
                 />
               </label>
             )}
@@ -236,7 +254,9 @@ export function TrackOrderClient({
             <div className="mt-4 break-words rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
               <p>{error}</p>
               {(error === "Order not found." ||
-                error === "No orders were found for that phone number.") &&
+                error === "No orders were found for that phone number." ||
+                error === "لم يتم العثور على الطلب." ||
+                error === "لم يتم العثور على طلبات بهذا الرقم.") &&
               contactUrl ? (
                 <Link
                   href={contactUrl}
@@ -244,7 +264,7 @@ export function TrackOrderClient({
                   rel="noreferrer"
                   className="mt-3 inline-flex rounded-md border border-[#25D366]/45 bg-[#25D366] px-3 py-2 text-sm font-bold text-white"
                 >
-                  Contact on WhatsApp
+                  {language === "ar" ? "تواصل عبر واتساب" : "Contact on WhatsApp"}
                 </Link>
               ) : null}
             </div>
@@ -252,7 +272,7 @@ export function TrackOrderClient({
 
           <Button type="submit" className="mt-5 w-full" disabled={loading}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-            Track Order
+            {t("track_button")}
           </Button>
         </form>
 
@@ -260,7 +280,7 @@ export function TrackOrderClient({
           <div className="space-y-4">
             {results.map((result) => {
               const items = parseItems(result.order_items);
-              const shortId = result.id.slice(0, 8).toUpperCase();
+              const displayId = result.order_code || result.id;
 
               return (
                 <article
@@ -269,9 +289,9 @@ export function TrackOrderClient({
                 >
                   <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                     <div>
-                      <p className="text-sm text-cream/55">Order #{shortId}</p>
+                      <p className="text-sm text-cream/55">{t("track_order_code")}</p>
                       <h2 className="mt-1 break-all text-sm font-semibold text-cream sm:text-lg">
-                        {result.id}
+                        {displayId}
                       </h2>
                       <p className="mt-2 text-sm text-cream/60">
                         Placed {new Date(result.created_at).toLocaleDateString()}
@@ -328,8 +348,8 @@ export function TrackOrderClient({
           </div>
         ) : (
           <EmptyState
-            title="حالة الطلب غادي تبان هنا"
-            description="معلومات الطلب كتبقى خاصة، ونظهر فقط الطلبات المطابقة للهاتف أو Order ID."
+            title={t("track_empty_title")}
+            description={t("track_empty_description")}
             className="luxury-panel luxury-reveal border-solid bg-transparent shadow-soft"
           />
         )}

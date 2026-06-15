@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BadgeCheck, ChevronLeft, MessageCircle, PackageCheck } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { DirectOrderForm } from "@/components/store/DirectOrderForm";
 import { ProductGallery } from "@/components/store/ProductGallery";
-import { getProductBySlug, getStoreSettings } from "@/lib/data";
+import { getProductBySlug, getStoreSettings, getStoreTexts } from "@/lib/data";
+import { getServerLanguage } from "@/lib/preferences";
+import { textFromMap } from "@/lib/store-texts";
 import { formatPrice } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -14,34 +16,20 @@ export default async function ProductDetailsPage({
 }: {
   params: { slug: string };
 }) {
-  const [settings, product] = await Promise.all([
+  const language = getServerLanguage();
+  const [settings, product, texts] = await Promise.all([
     getStoreSettings(),
-    getProductBySlug(params.slug)
+    getProductBySlug(params.slug),
+    getStoreTexts()
   ]);
+  const t = (key: Parameters<typeof textFromMap>[1]) =>
+    textFromMap(texts, key, language);
 
   if (!product || !product.is_active) {
     notFound();
   }
 
   const inStock = product.stock_status === "available";
-  const productBenefits = [
-    {
-      icon: BadgeCheck,
-      title: "تفاصيل واضحة",
-      text: "شوف الصور والوصف قبل ما تأكد الطلب."
-    },
-    {
-      icon: MessageCircle,
-      title: "تأكيد مباشر",
-      text: "الطلب كيتسجل ثم كيتوجد للتأكيد عبر واتساب."
-    },
-    {
-      icon: PackageCheck,
-      title: "الدفع عند الاستلام",
-      text: settings.delivery_text
-    }
-  ];
-
   return (
     <section className="luxury-page page-transition">
       <div className="relative border-b border-gold/20 py-6">
@@ -51,7 +39,7 @@ export default async function ProductDetailsPage({
             className="inline-flex items-center gap-2 text-sm font-semibold text-champagne transition-colors duration-300 hover:text-cream"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden />
-            الرجوع للساعات
+            {t("product_back")}
           </Link>
         </div>
       </div>
@@ -69,7 +57,7 @@ export default async function ProductDetailsPage({
               WQITAK
             </p>
             <h2 className="mt-2 text-2xl font-semibold leading-tight text-cream">
-              وصف المنتج
+              {t("product_description_title")}
             </h2>
             {product.description ? (
               <p className="mt-4 whitespace-pre-line text-base leading-8 text-cream/70">
@@ -77,30 +65,9 @@ export default async function ProductDetailsPage({
               </p>
             ) : (
               <p className="mt-4 text-base leading-8 text-cream/70">
-                ساعة فاخرة من WQITAK متوفرة للطلب المباشر مع تأكيد سريع والدفع عند الاستلام.
+                {t("product_description_fallback")}
               </p>
             )}
-
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {productBenefits.map((benefit) => {
-                const Icon = benefit.icon;
-
-                return (
-                  <div
-                    key={benefit.title}
-                    className="rounded-md border border-gold/20 bg-white/[0.045] p-4 shadow-sm"
-                  >
-                    <Icon className="h-5 w-5 text-champagne" aria-hidden />
-                    <h3 className="mt-3 text-sm font-semibold text-cream">
-                      {benefit.title}
-                    </h3>
-                    <p className="mt-2 text-xs leading-5 text-cream/60">
-                      {benefit.text}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
           </section>
         </div>
 
@@ -115,7 +82,7 @@ export default async function ProductDetailsPage({
               tone={inStock ? "success" : "danger"}
               className={inStock ? "border-gold/35 bg-white/5 text-champagne" : undefined}
             >
-              {inStock ? "Available" : "Out of stock"}
+              {inStock ? t("product_available") : t("product_out_of_stock")}
             </Badge>
           </div>
 
@@ -134,10 +101,15 @@ export default async function ProductDetailsPage({
           </div>
 
           <p className="mt-5 text-sm leading-7 text-cream/65">
-            عمر معلوماتك باش نأكدو الطلب والتوصيل. الأداء كيكون عند الاستلام.
+            {t("product_order_intro")}
           </p>
 
-          <DirectOrderForm product={product} settings={settings} />
+          <DirectOrderForm
+            product={product}
+            settings={settings}
+            language={language}
+            texts={texts}
+          />
         </div>
       </div>
     </section>

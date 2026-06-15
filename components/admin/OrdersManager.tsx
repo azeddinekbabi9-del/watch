@@ -42,7 +42,7 @@ export function OrdersManager({
   }, [orders]);
 
   const filtered = localOrders.filter((order) => {
-    const matchesSearch = `${order.customer_name} ${order.customer_phone}`
+    const matchesSearch = `${order.customer_name} ${order.customer_phone} ${order.order_code ?? ""}`
       .toLowerCase()
       .includes(search.toLowerCase());
     const matchesStatus = status === "all" || order.status === status;
@@ -89,6 +89,7 @@ export function OrdersManager({
           <thead className="bg-gold/10 text-xs uppercase tracking-[0.12em] text-ink/55">
             <tr>
               <th className="px-4 py-3">Customer</th>
+              <th className="px-4 py-3">Order ID</th>
               <th className="px-4 py-3">Phone</th>
               <th className="px-4 py-3">City</th>
               <th className="px-4 py-3">Total</th>
@@ -102,6 +103,9 @@ export function OrdersManager({
               <tr key={order.id}>
                 <td className="px-4 py-3 font-semibold text-ink">
                   <Link href={`/admin/orders/${order.id}`}>{order.customer_name}</Link>
+                </td>
+                <td className="px-4 py-3 font-semibold text-ink">
+                  {order.order_code || order.id.slice(0, 8).toUpperCase()}
                 </td>
                 <td className="px-4 py-3 text-ink/65">{order.customer_phone}</td>
                 <td className="px-4 py-3 text-ink/65">{order.customer_city}</td>

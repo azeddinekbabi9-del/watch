@@ -1,10 +1,22 @@
 import Link from "next/link";
 import { Facebook, Instagram, Music2, Phone } from "lucide-react";
 import { Logo } from "@/components/store/Logo";
+import type { StoreLanguage } from "@/lib/preferences";
+import { textFromMap, type StoreTextMap } from "@/lib/store-texts";
 import type { StoreSettings } from "@/types/database";
 
-export function SiteFooter({ settings }: { settings: StoreSettings }) {
+export function SiteFooter({
+  settings,
+  language,
+  texts
+}: {
+  settings: StoreSettings;
+  language: StoreLanguage;
+  texts: StoreTextMap;
+}) {
   const brandSettings = { ...settings, store_name: "WQITAK" };
+  const t = (key: Parameters<typeof textFromMap>[1]) =>
+    textFromMap(texts, key, language);
 
   return (
     <footer className="border-t border-gold/20 bg-[#050505] text-cream">
@@ -12,8 +24,7 @@ export function SiteFooter({ settings }: { settings: StoreSettings }) {
         <div>
           <Logo settings={brandSettings} size="sm" textClassName="text-champagne" />
           <p className="mt-4 max-w-md text-sm leading-6 text-cream/65">
-            {settings.store_description ||
-              "ساعات أنيقة بتصميم فاخر وجودة عالية مع طلب مباشر والدفع عند الاستلام."}
+            {settings.store_description || t("footer_description")}
           </p>
           {settings.store_phone ? (
             <Link
@@ -28,8 +39,8 @@ export function SiteFooter({ settings }: { settings: StoreSettings }) {
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">WQITAK</h3>
           <div className="mt-3 flex flex-col gap-2 text-sm text-cream/65">
-            <Link href="/products" className="transition-colors duration-300 hover:text-champagne">الساعات</Link>
-            <Link href="/track-order" className="transition-colors duration-300 hover:text-champagne">تتبع الطلب</Link>
+            <Link href="/products" className="transition-colors duration-300 hover:text-champagne">{t("nav_products")}</Link>
+            <Link href="/track-order" className="transition-colors duration-300 hover:text-champagne">{t("nav_track")}</Link>
           </div>
         </div>
         <div>

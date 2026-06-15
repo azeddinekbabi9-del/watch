@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import { CustomerChrome } from "@/components/store/CustomerChrome";
-import { getProducts, getStoreSettings } from "@/lib/data";
+import { getProducts, getStoreSettings, getStoreTexts } from "@/lib/data";
+import { getServerLanguage, getServerTheme, getTextDirection } from "@/lib/preferences";
 
 export const metadata: Metadata = {
   title: "WQITAK",
@@ -14,15 +15,24 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [settings, searchProducts] = await Promise.all([
+  const language = getServerLanguage();
+  const theme = getServerTheme();
+  const [settings, searchProducts, texts] = await Promise.all([
     getStoreSettings(),
-    getProducts()
+    getProducts(),
+    getStoreTexts()
   ]);
 
   return (
-    <html lang="ar">
+    <html lang={language} dir={getTextDirection(language)} data-theme={theme}>
       <body>
-        <CustomerChrome settings={settings} searchProducts={searchProducts}>
+        <CustomerChrome
+          settings={settings}
+          searchProducts={searchProducts}
+          language={language}
+          theme={theme}
+          texts={texts}
+        >
           {children}
         </CustomerChrome>
       </body>

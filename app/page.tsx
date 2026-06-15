@@ -1,21 +1,25 @@
 import Link from "next/link";
-import { BadgeCheck, Clock, MessageCircle, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { Clock, MessageCircle, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import { buttonVariants } from "@/components/ui/Button";
 import { ProductCard } from "@/components/store/ProductCard";
-import { getCategories, getProducts, getStoreSettings } from "@/lib/data";
+import { ResponsiveStoreImage } from "@/components/store/ResponsiveStoreImage";
+import { getCategories, getProducts, getStoreSettings, getStoreTexts } from "@/lib/data";
+import { getServerLanguage } from "@/lib/preferences";
+import { textFromMap } from "@/lib/store-texts";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 
 export const dynamic = "force-dynamic";
 
-const heroSubtitle =
-  "ساعات أنيقة بتصميم فاخر وجودة عالية — اطلب الآن والدفع عند الاستلام.";
-
 export default async function HomePage() {
-  const [settings, featuredProducts, categories] = await Promise.all([
+  const language = getServerLanguage();
+  const [settings, featuredProducts, categories, texts] = await Promise.all([
     getStoreSettings(),
     getProducts({ featuredOnly: true }),
-    getCategories(true)
+    getCategories(true),
+    getStoreTexts()
   ]);
+  const t = (key: Parameters<typeof textFromMap>[1]) =>
+    textFromMap(texts, key, language);
 
   const heroImage =
     settings.hero_image_url ||
@@ -24,9 +28,10 @@ export default async function HomePage() {
   return (
     <div className="luxury-page page-transition">
       <section className="relative min-h-[calc(100svh-68px)] overflow-hidden text-white lg:min-h-[780px]">
-        <img
+        <ResponsiveStoreImage
           src={heroImage}
           alt="WQITAK luxury wristwatch"
+          variant="hero"
           className="absolute inset-0 h-full w-full object-cover opacity-42"
         />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(212,175,55,0.2),transparent_24rem)]" />
@@ -37,13 +42,13 @@ export default async function HomePage() {
           <div className="hero-reveal max-w-3xl">
             <div className="mb-7 h-px w-32 bg-gradient-to-r from-gold via-champagne to-transparent" />
             <p className="text-sm font-semibold uppercase tracking-[0.34em] text-champagne">
-              Luxury wristwatches
+              {t("hero_eyebrow")}
             </p>
             <h1 className="gold-text mt-5 text-6xl font-semibold leading-[0.9] tracking-[0.08em] sm:text-7xl md:text-8xl">
-              WQITAK
+              {t("hero_title")}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-9 text-cream/82 md:text-xl">
-              {heroSubtitle}
+              {t("hero_subtitle")}
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -54,7 +59,7 @@ export default async function HomePage() {
                   className: "w-full sm:w-auto"
                 })}
               >
-                Order Now
+                {t("hero_cta")}
               </Link>
               {settings.admin_whatsapp_phone ? (
                 <Link
@@ -71,16 +76,16 @@ export default async function HomePage() {
                   })}
                 >
                   <MessageCircle className="h-4 w-4" aria-hidden />
-                  WhatsApp
+                  {t("hero_whatsapp")}
                 </Link>
               ) : null}
             </div>
 
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
               {[
-                ["COD", "الدفع عند الاستلام"],
-                ["Premium", "اختيارات فاخرة"],
-                ["Fast", "تأكيد مباشر"]
+                [t("hero_stat_cod_title"), t("hero_stat_cod_text")],
+                [t("hero_stat_premium_title"), t("hero_stat_premium_text")],
+                [t("hero_stat_fast_title"), t("hero_stat_fast_text")]
               ].map(([title, text]) => (
                 <div
                   key={title}
@@ -100,14 +105,14 @@ export default async function HomePage() {
           <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div className="max-w-2xl">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-gold">
-                WQITAK Selection
+                {t("featured_eyebrow")}
               </p>
               <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-cream md:text-4xl">
-                ساعات مختارة لطلّة فاخرة
+                {t("featured_title")}
               </h2>
             </div>
             <Link href="/products" className="font-semibold text-champagne transition-colors duration-300 hover:text-white">
-              كل الساعات
+              {t("featured_all")}
             </Link>
           </div>
           {featuredProducts.length > 0 ? (
@@ -118,6 +123,9 @@ export default async function HomePage() {
                   product={product}
                   currency={settings.currency}
                   index={index}
+                  orderLabel={t("order_now")}
+                  availableLabel={t("product_available")}
+                  outOfStockLabel={t("product_out_of_stock")}
                 />
               ))}
             </div>
@@ -125,10 +133,10 @@ export default async function HomePage() {
             <div className="luxury-panel rounded-md p-8 text-center">
               <Sparkles className="mx-auto h-10 w-10 text-gold" aria-hidden />
               <h3 className="mt-3 text-lg font-semibold text-cream">
-                سيتم عرض ساعات WQITAK المختارة قريبا
+                {t("featured_empty_title")}
               </h3>
               <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-cream/62">
-                أضف منتجات مميزة من لوحة الإدارة لتظهر هنا بتصميم فاخر.
+                {t("featured_empty_description")}
               </p>
             </div>
           )}
@@ -140,10 +148,10 @@ export default async function HomePage() {
           <div className="container-page">
             <div className="luxury-reveal mx-auto mb-8 max-w-2xl text-center">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-gold">
-                Collections
+                {t("categories_eyebrow")}
               </p>
               <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-cream md:text-4xl">
-                تصنيفات WQITAK
+                {t("categories_title")}
               </h2>
               <div className="gold-divider mx-auto mt-5 w-32" />
             </div>
@@ -187,18 +195,18 @@ export default async function HomePage() {
             {[
               {
                 icon: ShieldCheck,
-                title: "جودة مختارة",
-                text: "كل ساعة كتقدم حضور فاخر وتفاصيل مصقولة بعناية."
+                title: t("benefit_quality_title"),
+                text: t("benefit_quality_text")
               },
               {
                 icon: Clock,
-                title: "طلب مباشر",
-                text: "اختار الساعة، عمر معلوماتك، وفريق WQITAK يتواصل معك للتأكيد."
+                title: t("benefit_order_title"),
+                text: t("benefit_order_text")
               },
               {
                 icon: Truck,
-                title: "الدفع عند الاستلام",
-                text: settings.delivery_text || "توصيل مع تأكيد عبر الهاتف أو واتساب."
+                title: t("benefit_cod_title"),
+                text: settings.delivery_text || t("benefit_cod_text")
               }
             ].map((benefit) => {
               const Icon = benefit.icon;
@@ -220,11 +228,6 @@ export default async function HomePage() {
                 </div>
               );
             })}
-          </div>
-
-          <div className="mt-5 flex items-center justify-center gap-2 text-xs uppercase tracking-[0.28em] text-gold/80">
-            <BadgeCheck className="h-4 w-4" aria-hidden />
-            WQITAK luxury direct ordering
           </div>
         </section>
       ) : null}

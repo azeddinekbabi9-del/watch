@@ -70,6 +70,12 @@ export function ProductForm({ categories, product }: ProductFormProps) {
     }
 
     const supabase: any = createSupabaseBrowserClient();
+    if (!supabase) {
+      setError("Supabase is not configured. Check your environment variables.");
+      setSaving(false);
+      return;
+    }
+
     const request = product
       ? supabase.from("products").update(payload).eq("id", product.id)
       : supabase.from("products").insert(payload);
@@ -89,11 +95,11 @@ export function ProductForm({ categories, product }: ProductFormProps) {
   return (
     <form
       onSubmit={save}
-      className="w-full max-w-4xl rounded-md border border-gold/20 bg-white/92 p-4 shadow-sm sm:p-5"
+      className="admin-theme-card w-full max-w-4xl rounded-md border border-gold/20 p-4 shadow-sm sm:p-5"
     >
       <div className="grid gap-4 md:grid-cols-2">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Product name</span>
+          <span className="text-sm font-semibold theme-text">Product name</span>
           <Input
             value={form.name}
             onChange={(event) => update("name", event.target.value)}
@@ -101,7 +107,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           />
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Slug</span>
+          <span className="text-sm font-semibold theme-text">Slug</span>
           <Input
             value={form.slug}
             onChange={(event) => update("slug", slugify(event.target.value))}
@@ -109,7 +115,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           />
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Price</span>
+          <span className="text-sm font-semibold theme-text">Price</span>
           <Input
             type="number"
             step="0.01"
@@ -120,7 +126,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           />
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Old price</span>
+          <span className="text-sm font-semibold theme-text">Old price</span>
           <Input
             type="number"
             step="0.01"
@@ -130,7 +136,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           />
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Category</span>
+          <span className="text-sm font-semibold theme-text">Category</span>
           <Select
             value={form.category_id}
             onChange={(event) => update("category_id", event.target.value)}
@@ -144,7 +150,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           </Select>
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Stock status</span>
+          <span className="text-sm font-semibold theme-text">Stock status</span>
           <Select
             value={form.stock_status}
             onChange={(event) => update("stock_status", event.target.value as StockStatus)}
@@ -154,28 +160,28 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           </Select>
         </label>
         <label className="space-y-2 md:col-span-2">
-          <span className="text-sm font-semibold text-ink">Image URL</span>
+          <span className="text-sm font-semibold theme-text">Image URL</span>
           <Input
             value={form.image_url}
             onChange={(event) => update("image_url", event.target.value)}
           />
-          <p className="text-xs leading-5 text-ink/50">
-            Recommended size: 800x800px for desktop, 500x500px for mobile.
+          <p className="text-xs leading-5 theme-muted">
+            Product images display as 800x800px on desktop and 500x500px on mobile.
           </p>
         </label>
         <label className="space-y-2 md:col-span-2">
-          <span className="text-sm font-semibold text-ink">Gallery images</span>
+          <span className="text-sm font-semibold theme-text">Gallery images</span>
           <Textarea
             value={form.gallery_images}
             onChange={(event) => update("gallery_images", event.target.value)}
             placeholder="One image URL per line"
           />
-          <p className="text-xs leading-5 text-ink/50">
-            Recommended size: 800x800px for desktop, 500x500px for mobile.
+          <p className="text-xs leading-5 theme-muted">
+            Add one image URL per line. Product pages support multiple photos.
           </p>
         </label>
         <label className="space-y-2 md:col-span-2">
-          <span className="text-sm font-semibold text-ink">Description</span>
+          <span className="text-sm font-semibold theme-text">Description</span>
           <Textarea
             value={form.description}
             onChange={(event) => update("description", event.target.value)}
@@ -184,7 +190,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
       </div>
 
       <div className="mt-5 flex flex-wrap gap-4">
-        <label className="flex items-center gap-2 text-sm font-semibold text-ink">
+        <label className="flex items-center gap-2 text-sm font-semibold theme-text">
           <input
             type="checkbox"
             checked={form.is_active}
@@ -193,7 +199,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           />
           Active
         </label>
-        <label className="flex items-center gap-2 text-sm font-semibold text-ink">
+        <label className="flex items-center gap-2 text-sm font-semibold theme-text">
           <input
             type="checkbox"
             checked={form.is_featured}

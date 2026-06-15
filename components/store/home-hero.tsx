@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { buttonVariants } from "@/components/ui/Button";
+import { ResponsiveStoreImage } from "@/components/store/ResponsiveStoreImage";
 
 type HomeHeroProps = {
   hero: {
@@ -22,9 +23,10 @@ export function HomeHero({ hero }: HomeHeroProps) {
   return (
     <section className="relative min-h-[calc(100svh-68px)] overflow-hidden bg-[#050505] text-white">
       {imageUrl ? (
-        <img
+        <ResponsiveStoreImage
           src={imageUrl}
           alt="WQITAK luxury wristwatch"
+          variant="hero"
           className="absolute inset-0 h-full w-full object-cover opacity-42"
         />
       ) : null}

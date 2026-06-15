@@ -93,151 +93,172 @@ export function SettingsForm({ settings }: { settings: StoreSettings }) {
   }
 
   return (
-    <form
-      onSubmit={save}
-      className="w-full max-w-5xl rounded-md border border-gold/20 bg-white/92 p-4 shadow-sm sm:p-5"
-    >
-      <div className="grid gap-4 md:grid-cols-2">
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Store name</span>
-          <Input
-            value={form.store_name}
-            onChange={(event) => update("store_name", event.target.value)}
-            required
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Logo URL</span>
-          <Input
-            value={form.logo_url}
-            onChange={(event) => update("logo_url", event.target.value)}
-          />
-          <p className="text-xs leading-5 text-ink/50">
-            Recommended: transparent PNG or SVG, clean square or horizontal logo.
-          </p>
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Main color</span>
-          <Input
-            type="color"
-            value={form.main_color}
-            onChange={(event) => update("main_color", event.target.value)}
-            className="h-12 p-1"
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Currency</span>
-          <Input
-            value={form.currency}
-            onChange={(event) => update("currency", event.target.value.toUpperCase())}
-            required
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Store phone</span>
-          <Input
-            value={form.store_phone}
-            onChange={(event) => update("store_phone", event.target.value)}
-            placeholder="+212 600 000 000"
-          />
-        </label>
-        <label className="space-y-2 md:col-span-2">
-          <span className="text-sm font-semibold text-ink">Admin WhatsApp phone</span>
-          <Input
-            value={form.admin_whatsapp_phone}
-            onChange={(event) =>
-              update("admin_whatsapp_phone", event.target.value)
-            }
-            placeholder="212600000000"
-          />
-        </label>
-        <label className="space-y-2 md:col-span-2">
-          <span className="text-sm font-semibold text-ink">Store description</span>
-          <Textarea
-            value={form.store_description}
-            onChange={(event) => update("store_description", event.target.value)}
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Hero title</span>
-          <Input
-            value={form.hero_title}
-            onChange={(event) => update("hero_title", event.target.value)}
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Hero image URL</span>
-          <Input
-            value={form.hero_image_url}
-            onChange={(event) => update("hero_image_url", event.target.value)}
-          />
-          <p className="text-xs leading-5 text-ink/50">
-            Recommended size: 1600x500px for desktop, 500x250px for mobile.
-          </p>
-        </label>
-        <label className="space-y-2 md:col-span-2">
-          <span className="text-sm font-semibold text-ink">Hero subtitle</span>
-          <Textarea
-            value={form.hero_subtitle}
-            onChange={(event) => update("hero_subtitle", event.target.value)}
-          />
-        </label>
-        <label className="space-y-2 md:col-span-2">
-          <span className="text-sm font-semibold text-ink">Delivery text</span>
-          <Textarea
-            value={form.delivery_text}
-            onChange={(event) => update("delivery_text", event.target.value)}
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Facebook URL</span>
-          <Input
-            value={form.facebook_url}
-            onChange={(event) => update("facebook_url", event.target.value)}
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Instagram URL</span>
-          <Input
-            value={form.instagram_url}
-            onChange={(event) => update("instagram_url", event.target.value)}
-          />
-        </label>
-        <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">TikTok URL</span>
-          <Input
-            value={form.tiktok_url}
-            onChange={(event) => update("tiktok_url", event.target.value)}
-          />
-        </label>
-      </div>
-
-      <div className="mt-5 flex flex-wrap gap-4">
-        {visibilityFields.map(({ key, label }) => (
-          <label key={key} className="flex items-center gap-2 text-sm font-semibold text-ink">
-            <input
-              type="checkbox"
-              checked={form[key]}
-              onChange={(event) => update(key, event.target.checked)}
-              className="h-4 w-4 accent-[var(--store-main)]"
+    <form onSubmit={save} className="w-full max-w-6xl space-y-5">
+      <section className="admin-theme-card rounded-md border border-gold/20 p-4 shadow-sm sm:p-5">
+        <h3 className="text-lg font-bold theme-text">Brand</h3>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Store name</span>
+            <Input
+              value={form.store_name}
+              onChange={(event) => update("store_name", event.target.value)}
+              required
             />
-            {label}
           </label>
-        ))}
-      </div>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Logo URL</span>
+            <Input
+              value={form.logo_url}
+              onChange={(event) => update("logo_url", event.target.value)}
+            />
+            <p className="text-xs leading-5 theme-muted">
+              Use a clean transparent PNG, SVG, or square logo image.
+            </p>
+          </label>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Main color</span>
+            <Input
+              type="color"
+              value={form.main_color}
+              onChange={(event) => update("main_color", event.target.value)}
+              className="h-12 p-1"
+            />
+          </label>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Currency</span>
+            <Input
+              value={form.currency}
+              onChange={(event) => update("currency", event.target.value.toUpperCase())}
+              required
+            />
+          </label>
+          <label className="space-y-2 md:col-span-2">
+            <span className="text-sm font-semibold theme-text">Store description</span>
+            <Textarea
+              value={form.store_description}
+              onChange={(event) => update("store_description", event.target.value)}
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="admin-theme-card rounded-md border border-gold/20 p-4 shadow-sm sm:p-5">
+        <h3 className="text-lg font-bold theme-text">Contact and Ordering</h3>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Store phone</span>
+            <Input
+              value={form.store_phone}
+              onChange={(event) => update("store_phone", event.target.value)}
+              placeholder="+212 600 000 000"
+            />
+          </label>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Admin WhatsApp phone</span>
+            <Input
+              value={form.admin_whatsapp_phone}
+              onChange={(event) =>
+                update("admin_whatsapp_phone", event.target.value)
+              }
+              placeholder="212600000000"
+            />
+          </label>
+          <label className="space-y-2 md:col-span-2">
+            <span className="text-sm font-semibold theme-text">Delivery text</span>
+            <Textarea
+              value={form.delivery_text}
+              onChange={(event) => update("delivery_text", event.target.value)}
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="admin-theme-card rounded-md border border-gold/20 p-4 shadow-sm sm:p-5">
+        <h3 className="text-lg font-bold theme-text">Hero and Banner</h3>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Hero title</span>
+            <Input
+              value={form.hero_title}
+              onChange={(event) => update("hero_title", event.target.value)}
+            />
+          </label>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Hero image URL</span>
+            <Input
+              value={form.hero_image_url}
+              onChange={(event) => update("hero_image_url", event.target.value)}
+            />
+            <p className="text-xs leading-5 theme-muted">
+              Desktop banner: 1600x500px. Mobile banner: 500x250px.
+            </p>
+          </label>
+          <label className="space-y-2 md:col-span-2">
+            <span className="text-sm font-semibold theme-text">Hero subtitle</span>
+            <Textarea
+              value={form.hero_subtitle}
+              onChange={(event) => update("hero_subtitle", event.target.value)}
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="admin-theme-card rounded-md border border-gold/20 p-4 shadow-sm sm:p-5">
+        <h3 className="text-lg font-bold theme-text">Social Links</h3>
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Facebook URL</span>
+            <Input
+              value={form.facebook_url}
+              onChange={(event) => update("facebook_url", event.target.value)}
+            />
+          </label>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">Instagram URL</span>
+            <Input
+              value={form.instagram_url}
+              onChange={(event) => update("instagram_url", event.target.value)}
+            />
+          </label>
+          <label className="space-y-2">
+            <span className="text-sm font-semibold theme-text">TikTok URL</span>
+            <Input
+              value={form.tiktok_url}
+              onChange={(event) => update("tiktok_url", event.target.value)}
+            />
+          </label>
+        </div>
+      </section>
+
+      <section className="admin-theme-card rounded-md border border-gold/20 p-4 shadow-sm sm:p-5">
+        <h3 className="text-lg font-bold theme-text">Homepage Visibility</h3>
+        <div className="mt-4 flex flex-wrap gap-4">
+          {visibilityFields.map(({ key, label }) => (
+            <label key={key} className="flex items-center gap-2 text-sm font-semibold theme-text">
+              <input
+                type="checkbox"
+                checked={form[key]}
+                onChange={(event) => update(key, event.target.checked)}
+                className="h-4 w-4 accent-[var(--store-main)]"
+              />
+              {label}
+            </label>
+          ))}
+        </div>
+      </section>
 
       {message ? (
-        <p className="mt-4 rounded-md bg-mint p-3 text-sm font-medium text-moss">
+        <p className="rounded-md bg-mint p-3 text-sm font-medium text-moss">
           {message}
         </p>
       ) : null}
       {error ? (
-        <p className="mt-4 rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
+        <p className="rounded-md bg-coral/10 p-3 text-sm font-medium text-coral">
           {error}
         </p>
       ) : null}
 
-      <Button type="submit" className="mt-6" disabled={saving}>
+      <Button type="submit" disabled={saving}>
         {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
         Save settings
       </Button>

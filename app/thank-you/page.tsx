@@ -2,7 +2,9 @@ import Link from "next/link";
 import { CheckCircle2, MessageCircle, PackageCheck, Search } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
-import { getStoreSettings, getTrackedOrderById } from "@/lib/data";
+import { getStoreSettings, getStoreTexts, getTrackedOrderById } from "@/lib/data";
+import { getServerLanguage } from "@/lib/preferences";
+import { textFromMap } from "@/lib/store-texts";
 import { createWhatsAppUrl } from "@/lib/whatsapp";
 import { formatPrice } from "@/lib/utils";
 import type { Json, OrderStatus } from "@/types/database";
@@ -54,7 +56,10 @@ export default async function ThankYouPage({
 }: {
   searchParams?: { orderId?: string };
 }) {
-  const settings = await getStoreSettings();
+  const language = getServerLanguage();
+  const [settings, texts] = await Promise.all([getStoreSettings(), getStoreTexts()]);
+  const t = (key: Parameters<typeof textFromMap>[1]) =>
+    textFromMap(texts, key, language);
   const orderId = searchParams?.orderId?.trim() ?? "";
   const order = orderId ? await getTrackedOrderById(orderId) : null;
   const orderItems = order ? parseItems(order.order_items) : [];
@@ -63,7 +68,7 @@ export default async function ThankYouPage({
     ? createWhatsAppUrl(
         settings.admin_whatsapp_phone,
         orderId
-          ? `Hello, I want to ask about my order ${orderId}.`
+          ? `Hello, I want to ask about my WQITAK order ${orderId}.`
           : "Hello, I want to ask about my order."
       )
     : "";
@@ -81,10 +86,10 @@ export default async function ThankYouPage({
               WQITAK order
             </p>
             <h1 className="gold-text mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">
-              تم استلام طلبك
+              {t("thank_you_title")}
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-cream/75 md:text-base">
-              شكرا لاختيارك WQITAK. سنتواصل معك لتأكيد الساعة، معلومات التوصيل، والدفع عند الاستلام.
+              {t("thank_you_message")}
             </p>
             <div className="gold-divider mx-auto mt-6 w-36" />
           </div>
@@ -94,9 +99,9 @@ export default async function ThankYouPage({
           <div className="min-w-0 rounded-md border border-gold/20 bg-white/[0.045] p-4 shadow-sm sm:p-5">
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
               <div>
-                <p className="text-sm font-semibold text-cream/55">Order ID</p>
+                <p className="text-sm font-semibold text-cream/55">{t("track_order_code")}</p>
                 <h2 className="mt-2 break-all text-lg font-bold text-cream">
-                  {orderId || "Not available"}
+                  {order?.order_code || orderId || "Not available"}
                 </h2>
               </div>
               <Badge tone={statusTone(displayStatus)}>
@@ -158,9 +163,9 @@ export default async function ThankYouPage({
             <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold/35 bg-gold/10">
               <PackageCheck className="h-6 w-6 text-gold" aria-hidden />
             </div>
-            <h2 className="mt-4 text-xl font-semibold text-cream">شنو الخطوة الجاية؟</h2>
+            <h2 className="mt-4 text-xl font-semibold text-cream">{t("thank_you_next_title")}</h2>
             <p className="mt-3 text-sm leading-7 text-cream/65">
-              احتافظ بالـ Order ID باش تتبع الطلب. تقدر ترجع للساعات أو تتواصل معنا على واتساب.
+              {t("thank_you_next_text")}
             </p>
 
             <div className="mt-6 grid gap-3">
@@ -175,7 +180,7 @@ export default async function ThankYouPage({
                 href="/products"
                 className={buttonVariants({ variant: "outline", size: "lg" })}
               >
-                كل الساعات
+                {t("products_all")}
               </Link>
               {whatsappUrl ? (
                 <Link

@@ -12,7 +12,7 @@ export default async function AdminCategoriesPage() {
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
           Catalog
         </p>
-        <h2 className="mt-2 text-3xl font-bold text-ink">Categories</h2>
+        <h2 className="mt-2 text-3xl font-bold theme-text">Categories</h2>
       </div>
       <CategoryManager categories={categories} />
     </div>

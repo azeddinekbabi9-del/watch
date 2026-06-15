@@ -12,7 +12,7 @@ import { getCartTotal } from "@/lib/cart";
 import { getSupabaseConfig } from "@/lib/config";
 import { createSupabaseBrowserClient } from "@/lib/supabase";
 import { buildOrderMessage, createWhatsAppUrl } from "@/lib/whatsapp";
-import { createClientUuid, createOrderAccessToken, formatPrice } from "@/lib/utils";
+import { createClientUuid, createOrderAccessToken, createOrderCode, formatPrice } from "@/lib/utils";
 import type { StoreSettings } from "@/types/database";
 
 const checkoutSchema = z.object({
@@ -65,6 +65,10 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
       let orderItems: any[] = cart.items;
       let orderTotal = cart.total;
       const orderId = createClientUuid();
+      const orderCode = createOrderCode(
+        parsed.data.customer_name,
+        parsed.data.customer_phone
+      );
 
       if (config.isConfigured) {
         const supabase: any = createSupabaseBrowserClient();
@@ -117,6 +121,7 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
 
         const { error: orderError } = await supabase.from("orders").insert({
           id: orderId,
+          order_code: orderCode,
           order_access_token: orderAccessToken,
           customer_name: parsed.data.customer_name,
           customer_phone: parsed.data.customer_phone,
@@ -149,7 +154,8 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
       }
 
       const message = buildOrderMessage({
-        orderId,
+        orderId: orderCode,
+        storeName: "WQITAK",
         customer: parsed.data,
         items: orderItems,
         total: orderTotal,
@@ -158,7 +164,7 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
 
       cart.clearCart();
       setForm(initialForm);
-      setTrackingOrderId(orderId);
+      setTrackingOrderId(orderCode);
 
       const nextWhatsappUrl = settings.admin_whatsapp_phone
         ? createWhatsAppUrl(settings.admin_whatsapp_phone, message)

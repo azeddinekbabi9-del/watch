@@ -57,6 +57,9 @@ export default async function OrderDetailsPage({
           <h2 className="mt-2 break-words text-3xl font-bold text-ink">
             {order.customer_name}
           </h2>
+          <p className="mt-2 text-sm font-semibold text-ink/60">
+            Order ID: {order.order_code || order.id}
+          </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           <Link

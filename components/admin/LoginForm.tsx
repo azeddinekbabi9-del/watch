@@ -48,7 +48,7 @@ export function LoginForm() {
   return (
     <form
       onSubmit={login}
-      className="w-full max-w-md rounded-md border border-gold/25 bg-cream/96 p-6 shadow-luxury"
+      className="luxury-panel w-full max-w-md rounded-md p-6 shadow-luxury"
     >
       <div className="mb-6">
         <div className="mb-5">
@@ -57,15 +57,15 @@ export function LoginForm() {
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
           Admin
         </p>
-        <h1 className="mt-2 text-3xl font-bold text-ink">Sign in</h1>
-        <p className="mt-2 text-sm leading-6 text-ink/60">
+        <h1 className="mt-2 text-3xl font-bold theme-text">Sign in</h1>
+        <p className="mt-2 text-sm leading-6 theme-muted">
           Use the Supabase Auth user you create for store administration.
         </p>
       </div>
 
       <div className="space-y-4">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Email</span>
+          <span className="text-sm font-semibold theme-text">Email</span>
           <Input
             type="email"
             value={email}
@@ -75,7 +75,7 @@ export function LoginForm() {
           />
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Password</span>
+          <span className="text-sm font-semibold theme-text">Password</span>
           <Input
             type="password"
             value={password}

@@ -31,6 +31,7 @@ create table if not exists public.products (
 
 create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),
+  order_code text,
   order_access_token text not null default encode(gen_random_bytes(16), 'hex'),
   customer_name text not null,
   customer_phone text not null,
@@ -59,20 +60,23 @@ create table if not exists public.order_items (
 alter table public.orders
 add column if not exists order_access_token text not null default encode(gen_random_bytes(16), 'hex');
 
+alter table public.orders
+add column if not exists order_code text;
+
 alter table public.order_items
 add column if not exists order_access_token text not null default encode(gen_random_bytes(16), 'hex');
 
 create table if not exists public.store_settings (
   id uuid primary key default gen_random_uuid(),
-  store_name text not null default 'VQ Watches',
+  store_name text not null default 'WQITAK',
   logo_url text,
-  main_color text not null default '#11100e',
+  main_color text not null default '#050505',
   currency text not null default 'MAD',
   store_phone text,
   store_description text,
   admin_whatsapp_phone text not null default '',
-  hero_title text not null default 'Luxury timepieces for quiet confidence',
-  hero_subtitle text not null default 'Discover refined watches, premium straps, and elegant accessories with effortless WhatsApp ordering.',
+  hero_title text not null default 'WQITAK',
+  hero_subtitle text not null default 'Elegant watches with a luxury design and high quality. Order now and pay on delivery.',
   hero_image_url text,
   delivery_text text not null default 'Premium delivery with careful packaging and WhatsApp confirmation.',
   facebook_url text,
@@ -90,6 +94,16 @@ add column if not exists store_phone text;
 
 alter table public.store_settings
 add column if not exists store_description text;
+
+create table if not exists public.store_texts (
+  text_key text primary key,
+  section text not null,
+  label text not null,
+  en_text text not null,
+  ar_text text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
 
 create or replace function public.set_updated_at()
 returns trigger
@@ -121,11 +135,17 @@ create trigger set_store_settings_updated_at
 before update on public.store_settings
 for each row execute function public.set_updated_at();
 
+drop trigger if exists set_store_texts_updated_at on public.store_texts;
+create trigger set_store_texts_updated_at
+before update on public.store_texts
+for each row execute function public.set_updated_at();
+
 create index if not exists idx_categories_active_slug on public.categories(is_active, slug);
 create index if not exists idx_products_active_featured on public.products(is_active, is_featured);
 create index if not exists idx_products_category_id on public.products(category_id);
 create index if not exists idx_products_stock_status on public.products(stock_status);
 create index if not exists idx_orders_status_created_at on public.orders(status, created_at desc);
+create index if not exists idx_orders_order_code on public.orders(order_code);
 create index if not exists idx_order_items_order_id on public.order_items(order_id);
 
 create or replace function public.can_insert_order_item(
@@ -155,6 +175,7 @@ create function public.track_order(
 )
 returns table (
   id uuid,
+  order_code text,
   customer_name text,
   customer_phone text,
   customer_city text,
@@ -171,6 +192,7 @@ set search_path = public
 as $$
   select
     orders.id,
+    orders.order_code,
     orders.customer_name,
     orders.customer_phone,
     orders.customer_city,
@@ -194,11 +216,15 @@ as $$
   from public.orders
   left join public.order_items on order_items.order_id = orders.id
   where (
-    orders.id = case
-      when lookup_order_id ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
-        then lookup_order_id::uuid
-      else null
-    end
+    nullif(lookup_order_id, '') is not null
+    and (
+      orders.id = case
+        when lookup_order_id ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+          then lookup_order_id::uuid
+        else null
+      end
+      or upper(coalesce(orders.order_code, '')) = upper(lookup_order_id)
+    )
   )
   or (
     nullif(lookup_customer_phone, '') is not null
@@ -206,7 +232,7 @@ as $$
     and regexp_replace(orders.customer_phone, '\D', '', 'g')
       = regexp_replace(lookup_customer_phone, '\D', '', 'g')
   )
-  group by orders.id
+  group by orders.id, orders.order_code
   order by orders.created_at desc;
 $$;
 
@@ -217,6 +243,7 @@ alter table public.products enable row level security;
 alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
 alter table public.store_settings enable row level security;
+alter table public.store_texts enable row level security;
 
 drop policy if exists "Public can read active categories" on public.categories;
 create policy "Public can read active categories"
@@ -283,6 +310,19 @@ to authenticated
 using (true)
 with check (true);
 
+drop policy if exists "Public can read store texts" on public.store_texts;
+create policy "Public can read store texts"
+on public.store_texts for select
+to anon, authenticated
+using (true);
+
+drop policy if exists "Admins can manage store texts" on public.store_texts;
+create policy "Admins can manage store texts"
+on public.store_texts for all
+to authenticated
+using (true)
+with check (true);
+
 insert into public.store_settings (
   store_name,
   logo_url,
@@ -297,15 +337,15 @@ insert into public.store_settings (
   delivery_text
 )
 select
-  'VQ Watches',
+  'WQITAK',
   '/watch-logo.png',
-  '#11100e',
+  '#050505',
   'MAD',
   '+212 600 000 000',
-  'A refined Moroccan watch store for curated timepieces, straps, and elegant accessories.',
+  'WQITAK is a luxury wristwatch store with direct ordering and cash on delivery.',
   '',
-  'Luxury timepieces for quiet confidence',
-  'Discover refined watches, premium straps, and elegant accessories with effortless WhatsApp ordering.',
+  'WQITAK',
+  'Elegant watches with a luxury design and high quality. Order now and pay on delivery.',
   'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1600&q=80',
   'Premium delivery with careful packaging and WhatsApp confirmation.'
 where not exists (select 1 from public.store_settings);

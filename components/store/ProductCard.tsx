@@ -2,17 +2,24 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ShoppingBag } from "lucide-react";
 import { buttonVariants } from "@/components/ui/Button";
+import { ResponsiveStoreImage } from "@/components/store/ResponsiveStoreImage";
 import { formatPrice, productImageFallback } from "@/lib/utils";
 import type { ProductWithCategory } from "@/types/database";
 
 export function ProductCard({
   product,
   currency,
-  index = 0
+  index = 0,
+  orderLabel = "Order Now",
+  availableLabel = "Available",
+  outOfStockLabel = "Out of stock"
 }: {
   product: ProductWithCategory;
   currency: string;
   index?: number;
+  orderLabel?: string;
+  availableLabel?: string;
+  outOfStockLabel?: string;
 }) {
   const inStock = product.stock_status === "available";
   const style = { animationDelay: `${Math.min(index, 8) * 70}ms` } as CSSProperties;
@@ -23,15 +30,16 @@ export function ProductCard({
       className="luxury-card-hover animate-slide-up group overflow-hidden rounded-md border border-gold/20 bg-[#090909] text-cream shadow-soft"
     >
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden bg-[#050505]">
-          <img
+        <div className="relative aspect-square overflow-hidden bg-[#050505]">
+          <ResponsiveStoreImage
             src={product.image_url || productImageFallback}
             alt={product.name}
+            variant="product"
             className="h-full w-full object-cover opacity-95 transition-transform duration-700 ease-out group-hover:scale-[1.07]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent opacity-85" />
           <span className="absolute left-3 top-3 rounded-full border border-gold/35 bg-black/70 px-3 py-1 text-xs font-semibold text-champagne backdrop-blur">
-            {inStock ? "Available" : "Out of stock"}
+            {inStock ? availableLabel : outOfStockLabel}
           </span>
         </div>
       </Link>
@@ -60,7 +68,7 @@ export function ProductCard({
           })}
         >
           <ShoppingBag className="h-4 w-4" aria-hidden />
-          Order Now
+          {orderLabel}
         </Link>
       </div>
     </article>

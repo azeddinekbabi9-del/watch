@@ -8,6 +8,13 @@ type CookieToSet = {
   options?: any;
 };
 
+function getAdminEmailAllowlist() {
+  return (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
@@ -61,6 +68,16 @@ export async function middleware(request: NextRequest) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/admin/login";
     loginUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  const allowedEmails = getAdminEmailAllowlist();
+  const userEmail = String(user.email ?? "").toLowerCase();
+
+  if (allowedEmails.length > 0 && !allowedEmails.includes(userEmail)) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/admin/login";
+    loginUrl.searchParams.set("error", "not-authorized");
     return NextResponse.redirect(loginUrl);
   }
 

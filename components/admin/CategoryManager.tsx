@@ -56,17 +56,17 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
       return;
     }
 
-   const supabaseClient: any = createSupabaseBrowserClient();
+    const supabaseClient: any = createSupabaseBrowserClient();
 
-if (supabaseClient === null) {
-  setError("Supabase is not configured. Check your environment variables.");
-  setSaving(false);
-  return;
-}
+    if (!supabaseClient) {
+      setError("Supabase is not configured. Check your environment variables.");
+      setSaving(false);
+      return;
+    }
 
-const request = editing
-  ? supabaseClient.from("categories").update(payload).eq("id", form.id)
-  : supabaseClient.from("categories").insert(payload);
+    const request = editing
+      ? supabaseClient.from("categories").update(payload).eq("id", form.id)
+      : supabaseClient.from("categories").insert(payload);
     const { error: saveError } = await request;
     setSaving(false);
 
@@ -84,7 +84,12 @@ const request = editing
       return;
     }
 
-   const supabase: any = createSupabaseBrowserClient();
+    const supabase: any = createSupabaseBrowserClient();
+    if (!supabase) {
+      setError("Supabase is not configured. Check your environment variables.");
+      return;
+    }
+
     await supabase.from("categories").delete().eq("id", id);
     router.refresh();
   }
@@ -93,14 +98,14 @@ const request = editing
     <div className="grid gap-6 lg:grid-cols-[minmax(280px,420px)_minmax(0,1fr)]">
       <form
         onSubmit={save}
-        className="h-fit rounded-md border border-gold/20 bg-white/92 p-4 shadow-sm sm:p-5"
+        className="admin-theme-card h-fit rounded-md border border-gold/20 p-4 shadow-sm sm:p-5"
       >
-        <h2 className="text-lg font-bold text-ink">
+        <h2 className="text-lg font-bold theme-text">
           {editing ? "Edit category" : "New category"}
         </h2>
         <div className="mt-4 space-y-4">
           <label className="space-y-2">
-            <span className="text-sm font-semibold text-ink">Name</span>
+            <span className="text-sm font-semibold theme-text">Name</span>
             <Input
               value={form.name}
               onChange={(event) =>
@@ -110,7 +115,7 @@ const request = editing
             />
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-semibold text-ink">Slug</span>
+            <span className="text-sm font-semibold theme-text">Slug</span>
             <Input
               value={form.slug}
               onChange={(event) =>
@@ -123,19 +128,19 @@ const request = editing
             />
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-semibold text-ink">Image URL</span>
+            <span className="text-sm font-semibold theme-text">Image URL</span>
             <Input
               value={form.image_url}
               onChange={(event) =>
                 setForm((value) => ({ ...value, image_url: event.target.value }))
               }
             />
-            <p className="text-xs leading-5 text-ink/50">
+            <p className="text-xs leading-5 theme-muted">
               Recommended size: 800x800px for desktop, 500x500px for mobile.
             </p>
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-semibold text-ink">Description</span>
+            <span className="text-sm font-semibold theme-text">Description</span>
             <Textarea
               value={form.description}
               onChange={(event) =>
@@ -143,7 +148,7 @@ const request = editing
               }
             />
           </label>
-          <label className="flex items-center gap-2 text-sm font-semibold text-ink">
+          <label className="flex items-center gap-2 text-sm font-semibold theme-text">
             <input
               type="checkbox"
               checked={form.is_active}
@@ -180,9 +185,9 @@ const request = editing
         </div>
       </form>
 
-      <div className="min-w-0 overflow-hidden rounded-md border border-gold/20 bg-white/92 shadow-sm">
+      <div className="admin-theme-card min-w-0 overflow-hidden rounded-md border border-gold/20 shadow-sm">
         <div className="border-b border-gold/15 bg-gold/10 p-4">
-          <h2 className="text-lg font-bold text-ink">Categories</h2>
+          <h2 className="text-lg font-bold theme-text">Categories</h2>
         </div>
         <div className="divide-y divide-gold/15">
           {categories.map((category) => (
@@ -191,9 +196,9 @@ const request = editing
               className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <p className="font-bold text-ink">{category.name}</p>
-                <p className="text-sm text-ink/55">/{category.slug}</p>
-                <p className="mt-1 text-sm text-ink/55">
+                <p className="font-bold theme-text">{category.name}</p>
+                <p className="text-sm theme-muted">/{category.slug}</p>
+                <p className="mt-1 text-sm theme-muted">
                   {category.is_active ? "Visible" : "Hidden"}
                 </p>
               </div>
@@ -210,7 +215,7 @@ const request = editing
             </div>
           ))}
           {categories.length === 0 ? (
-            <p className="p-6 text-center text-sm text-ink/55">
+            <p className="p-6 text-center text-sm theme-muted">
               No categories yet.
             </p>
           ) : null}

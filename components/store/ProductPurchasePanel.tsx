@@ -1,12 +1,9 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { MessageCircle, Minus, Plus } from "lucide-react";
-import { AddToCartButton } from "@/components/store/AddToCartButton";
+import { Minus, Plus } from "lucide-react";
 import { OrderNowButton } from "@/components/store/OrderNowButton";
-import { Button, buttonVariants } from "@/components/ui/Button";
-import { createWhatsAppUrl } from "@/lib/whatsapp";
+import { Button } from "@/components/ui/Button";
 import type { ProductWithCategory } from "@/types/database";
 
 export function ProductPurchasePanel({
@@ -17,14 +14,12 @@ export function ProductPurchasePanel({
   whatsappPhone: string;
 }) {
   const [quantity, setQuantity] = React.useState(1);
-  const unavailable = product.stock_status === "out_of_stock";
-  const message = `Hello, I want to order ${quantity} x ${product.name}.`;
 
   return (
     <div className="space-y-4">
       <div>
-        <span className="text-sm font-semibold text-ink/70">Quantity</span>
-        <div className="mt-2 flex w-fit items-center rounded-md border border-ink/15 bg-white">
+        <span className="text-sm font-semibold text-cream/70">Quantity</span>
+        <div className="mt-2 flex w-fit items-center rounded-md border border-gold/25 bg-[#0d0d0d]">
           <Button
             type="button"
             variant="ghost"
@@ -48,39 +43,11 @@ export function ProductPurchasePanel({
           </Button>
         </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <AddToCartButton
-          product={product}
-          quantity={quantity}
-          className="h-12 w-full"
-        />
-        <OrderNowButton
-          product={product}
-          quantity={quantity}
-          className="h-12 w-full"
-        />
-      </div>
-      {whatsappPhone && unavailable ? (
-        <Button type="button" variant="secondary" size="lg" className="w-full" disabled>
-          <MessageCircle className="h-5 w-5" aria-hidden />
-          WhatsApp order
-        </Button>
-      ) : null}
-      {whatsappPhone && !unavailable ? (
-        <Link
-          href={createWhatsAppUrl(whatsappPhone, message)}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants({
-            variant: "secondary",
-            size: "lg",
-            className: "w-full"
-          })}
-        >
-          <MessageCircle className="h-5 w-5" aria-hidden />
-          WhatsApp order
-        </Link>
-      ) : null}
+      <OrderNowButton
+        product={product}
+        quantity={quantity}
+        className="h-12 w-full"
+      />
     </div>
   );
 }

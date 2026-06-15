@@ -6,7 +6,6 @@ interface CustomerOrder {
   customer_phone: string;
   customer_city: string;
   customer_address: string;
-  customer_notes?: string;
 }
 
 interface WhatsAppOrderMessageInput {
@@ -41,7 +40,6 @@ export function buildOrderMessage({
     `Phone: ${customer.customer_phone}`,
     `City: ${customer.customer_city}`,
     `Address: ${customer.customer_address}`,
-    `Notes: ${customer.customer_notes || "None"}`,
     "",
     "Products:",
     products,

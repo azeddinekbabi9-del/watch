@@ -7,7 +7,6 @@ import { z } from "zod";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
 import { useCart } from "@/components/store/CartProvider";
 import { getCartTotal } from "@/lib/cart";
 import { getSupabaseConfig } from "@/lib/config";
@@ -20,8 +19,7 @@ const checkoutSchema = z.object({
   customer_name: z.string().min(2, "Full name is required."),
   customer_phone: z.string().min(6, "Phone number is required."),
   customer_city: z.string().min(2, "City is required."),
-  customer_address: z.string().min(6, "Full address is required."),
-  customer_notes: z.string().optional()
+  customer_address: z.string().min(6, "Full address is required.")
 });
 
 type CheckoutForm = z.infer<typeof checkoutSchema>;
@@ -30,8 +28,7 @@ const initialForm: CheckoutForm = {
   customer_name: "",
   customer_phone: "",
   customer_city: "",
-  customer_address: "",
-  customer_notes: ""
+  customer_address: ""
 };
 
 export function CheckoutClient({ settings }: { settings: StoreSettings }) {
@@ -125,7 +122,7 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
           customer_phone: parsed.data.customer_phone,
           customer_city: parsed.data.customer_city,
           customer_address: parsed.data.customer_address,
-          customer_notes: parsed.data.customer_notes || null,
+          customer_notes: null,
           total_amount: orderTotal,
           status: "pending"
         });
@@ -186,18 +183,20 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
 
   if (cart.items.length === 0 && !success) {
     return (
-      <section className="container-page page-transition py-12">
+      <section className="luxury-page page-transition py-12">
+        <div className="relative container-page">
         <EmptyState
-          title="No products to checkout"
-          description="Add products to your cart before submitting an order."
+          title="لا توجد ساعات للطلب"
+          description="اختار ساعة من WQITAK ثم أكمل الطلب."
         />
         <div className="mt-6 flex justify-center">
           <Link
             href="/products"
             className={buttonVariants({ variant: "primary", size: "lg" })}
           >
-            Browse products
+            كل الساعات
           </Link>
+        </div>
         </div>
       </section>
     );
@@ -205,14 +204,14 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
 
   if (cart.items.length === 0 && success) {
     return (
-      <section className="container-page page-transition py-12">
-        <div className="luxury-reveal mx-auto max-w-xl rounded-md border border-gold/20 bg-cream p-8 text-center shadow-luxury">
+      <section className="luxury-page page-transition py-12">
+        <div className="luxury-panel luxury-reveal relative container-page mx-auto max-w-xl rounded-md p-8 text-center">
           <CheckCircle2 className="mx-auto h-12 w-12 text-gold" aria-hidden />
-          <h1 className="mt-4 text-2xl font-bold text-ink">Order submitted</h1>
-          <p className="mt-3 text-sm leading-6 text-ink/65">{success}</p>
+          <h1 className="mt-4 text-2xl font-bold text-cream">تم إرسال الطلب</h1>
+          <p className="mt-3 text-sm leading-6 text-cream/65">{success}</p>
 
           {trackingOrderId ? (
-            <p className="mt-3 rounded-md bg-gold/10 px-3 py-2 text-sm font-semibold text-ink">
+            <p className="mt-3 rounded-md border border-gold/20 bg-gold/10 px-3 py-2 text-sm font-semibold text-champagne">
               Order ID: {trackingOrderId}
             </p>
           ) : null}
@@ -240,7 +239,7 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
               href="/products"
               className={buttonVariants({ variant: "outline", size: "lg" })}
             >
-              Continue shopping
+              كل الساعات
             </Link>
           </div>
         </div>
@@ -249,24 +248,25 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
   }
 
   return (
-    <section className="container-page page-transition py-10">
+    <section className="luxury-page page-transition py-10">
+      <div className="relative container-page">
       <div className="hero-reveal mb-8">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Checkout
+          WQITAK
         </p>
-        <h1 className="mt-2 text-3xl font-semibold text-ink md:text-5xl">
-          Complete your order
+        <h1 className="gold-text mt-2 text-3xl font-semibold text-cream md:text-5xl">
+          أكمل الطلب
         </h1>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         <form
           onSubmit={submitOrder}
-          className="luxury-reveal rounded-md border border-gold/15 bg-cream p-5 shadow-soft"
+          className="luxury-panel luxury-reveal rounded-md p-5"
         >
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="space-y-2">
-              <span className="text-sm font-semibold text-ink">Full name</span>
+              <span className="text-sm font-semibold text-cream">Name</span>
               <Input
                 value={form.customer_name}
                 onChange={(event) =>
@@ -280,7 +280,7 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
             </label>
 
             <label className="space-y-2">
-              <span className="text-sm font-semibold text-ink">Phone number</span>
+              <span className="text-sm font-semibold text-cream">Phone</span>
               <Input
                 value={form.customer_phone}
                 onChange={(event) =>
@@ -294,7 +294,7 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
             </label>
 
             <label className="space-y-2">
-              <span className="text-sm font-semibold text-ink">City</span>
+              <span className="text-sm font-semibold text-cream">City</span>
               <Input
                 value={form.customer_city}
                 onChange={(event) =>
@@ -308,7 +308,7 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
             </label>
 
             <label className="space-y-2 sm:col-span-2">
-              <span className="text-sm font-semibold text-ink">Full address</span>
+              <span className="text-sm font-semibold text-cream">Address</span>
               <Input
                 value={form.customer_address}
                 onChange={(event) =>
@@ -321,19 +321,6 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
               />
             </label>
 
-            <label className="space-y-2 sm:col-span-2">
-              <span className="text-sm font-semibold text-ink">Notes</span>
-              <Textarea
-                value={form.customer_notes}
-                onChange={(event) =>
-                  setForm((value) => ({
-                    ...value,
-                    customer_notes: event.target.value
-                  }))
-                }
-                placeholder="Delivery time, color preference, or extra details"
-              />
-            </label>
           </div>
 
           {error ? (
@@ -368,38 +355,39 @@ export function CheckoutClient({ settings }: { settings: StoreSettings }) {
             ) : (
               <Send className="h-4 w-4" />
             )}
-            Submit order
+            Order Now
           </Button>
         </form>
 
-        <aside className="luxury-reveal h-fit rounded-md border border-gold/15 bg-white p-5 shadow-soft">
-          <h2 className="text-lg font-bold text-ink">Products summary</h2>
+        <aside className="luxury-panel luxury-reveal h-fit rounded-md p-5">
+          <h2 className="text-lg font-bold text-cream">Order summary</h2>
 
           <div className="mt-5 space-y-4">
             {cart.items.map((item: any) => (
               <div
                 key={item.id}
-                className="flex items-start justify-between gap-4 border-b border-ink/10 pb-4 last:border-0 last:pb-0"
+                className="flex items-start justify-between gap-4 border-b border-gold/15 pb-4 last:border-0 last:pb-0"
               >
                 <div>
-                  <p className="font-semibold text-ink">{item.name}</p>
-                  <p className="mt-1 text-sm text-ink/55">
+                  <p className="font-semibold text-cream">{item.name}</p>
+                  <p className="mt-1 text-sm text-cream/55">
                     Quantity: {item.quantity}
                   </p>
                 </div>
 
-                <p className="text-sm font-bold text-ink">
+                <p className="text-sm font-bold text-champagne">
                   {formatPrice(item.price * item.quantity, settings.currency)}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="mt-5 flex justify-between border-t border-ink/10 pt-4 text-lg font-bold text-ink">
+          <div className="mt-5 flex justify-between border-t border-gold/15 pt-4 text-lg font-bold text-cream">
             <span>Total</span>
-            <span>{formatPrice(cart.total, settings.currency)}</span>
+            <span className="gold-text">{formatPrice(cart.total, settings.currency)}</span>
           </div>
         </aside>
+      </div>
       </div>
     </section>
   );

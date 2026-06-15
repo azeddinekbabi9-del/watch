@@ -9,27 +9,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#11100e",
-        moss: "#5b4a32",
+        ink: "#050505",
+        moss: "#14110a",
         mint: "#efe2ca",
-        saffron: "#b88945",
+        saffron: "#b8892f",
         coral: "#e4574f",
-        cloud: "#fbf7ef",
-        cream: "#fffaf1",
-        sand: "#e7d3b7",
-        gold: "#b88945",
-        champagne: "#f3dfb7",
-        charcoal: "#171512"
+        cloud: "#050505",
+        cream: "#f7f2e7",
+        sand: "#c8b58a",
+        gold: "#d4af37",
+        champagne: "#f5d77a",
+        charcoal: "#111111"
       },
       boxShadow: {
-        soft: "0 18px 45px rgba(17, 16, 14, 0.12)",
-        luxury: "0 22px 70px rgba(17, 16, 14, 0.16)"
+        soft: "0 18px 45px rgba(0, 0, 0, 0.28)",
+        luxury: "0 24px 90px rgba(0, 0, 0, 0.42)"
       },
       backgroundImage: {
         "luxury-surface":
-          "linear-gradient(135deg, #fffaf1 0%, #fbf7ef 42%, #efe2ca 100%)",
+          "linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(212,175,55,0.08) 42%, rgba(255,255,255,0.03) 100%)",
         "gold-sheen":
-          "linear-gradient(135deg, #b88945 0%, #f3dfb7 52%, #9b6b2f 100%)"
+          "linear-gradient(135deg, #b8892f 0%, #f5d77a 48%, #d4af37 100%)"
       },
       keyframes: {
         "fade-in": {

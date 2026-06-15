@@ -13,17 +13,17 @@ const now = new Date().toISOString();
 
 export const demoSettings: StoreSettings = {
   id: "00000000-0000-0000-0000-000000000001",
-  store_name: "VQ Watches",
+  store_name: "WQITAK",
   logo_url: "/watch-logo.png",
-  main_color: "#11100e",
+  main_color: "#050505",
   currency: "MAD",
   store_phone: "+212 600 000 000",
   store_description:
-    "A refined Moroccan watch store for curated timepieces, straps, and elegant accessories.",
+    "WQITAK is a luxury wristwatch store with direct ordering and cash on delivery.",
   admin_whatsapp_phone: "212600000000",
-  hero_title: "Luxury timepieces for quiet confidence",
+  hero_title: "WQITAK",
   hero_subtitle:
-    "Discover refined watches, premium straps, and elegant accessories with effortless WhatsApp ordering.",
+    "ساعات أنيقة بتصميم فاخر وجودة عالية — اطلب الآن والدفع عند الاستلام.",
   hero_image_url:
     "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1600&q=80",
   delivery_text: "Premium delivery with careful packaging and WhatsApp confirmation.",
@@ -76,8 +76,8 @@ export const demoCategories: Category[] = [
 export const demoProducts: ProductWithCategory[] = [
   {
     id: "00000000-0000-0000-0000-000000000201",
-    name: "VQ Heritage Automatic",
-    slug: "vq-heritage-automatic",
+    name: "WQITAK Heritage Automatic",
+    slug: "wqitak-heritage-automatic",
     description:
       "A refined automatic watch with a warm dial, polished case, and a leather strap.",
     price: 2490,

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { ArrowRight, ShoppingBag } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
+import { ShoppingBag } from "lucide-react";
 import { buttonVariants } from "@/components/ui/Button";
 import { formatPrice, productImageFallback } from "@/lib/utils";
 import type { ProductWithCategory } from "@/types/database";
@@ -21,34 +20,29 @@ export function ProductCard({
   return (
     <article
       style={style}
-      className="luxury-card-hover animate-slide-up group overflow-hidden rounded-md border border-gold/20 bg-ink text-cream shadow-soft"
+      className="luxury-card-hover animate-slide-up group overflow-hidden rounded-md border border-gold/20 bg-[#090909] text-cream shadow-soft"
     >
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-charcoal">
+        <div className="relative aspect-[4/5] overflow-hidden bg-[#050505]">
           <img
             src={product.image_url || productImageFallback}
             alt={product.name}
-            className="h-full w-full object-cover opacity-94 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+            className="h-full w-full object-cover opacity-95 transition-transform duration-700 ease-out group-hover:scale-[1.07]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/58 via-transparent to-transparent opacity-80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent opacity-85" />
+          <span className="absolute left-3 top-3 rounded-full border border-gold/35 bg-black/70 px-3 py-1 text-xs font-semibold text-champagne backdrop-blur">
+            {inStock ? "Available" : "Out of stock"}
+          </span>
         </div>
       </Link>
       <div className="p-4 sm:p-5">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          {product.categories ? (
-            <Badge tone="neutral">{product.categories.name}</Badge>
-          ) : null}
-          <Badge tone={inStock ? "success" : "danger"}>
-            {inStock ? "Available" : "Out of stock"}
-          </Badge>
-        </div>
         <Link href={`/products/${product.slug}`}>
-          <h3 className="line-clamp-2 min-h-12 break-words text-base font-bold leading-6 text-cream transition-colors duration-300 group-hover:text-gold">
+          <h3 className="line-clamp-2 min-h-12 break-words text-base font-semibold leading-6 text-cream transition-colors duration-300 group-hover:text-champagne">
             {product.name}
           </h3>
         </Link>
         <div className="mt-3 flex items-baseline gap-2">
-          <span className="text-xl font-bold text-gold">
+          <span className="gold-text text-xl font-bold">
             {formatPrice(product.price, currency)}
           </span>
           {product.old_price ? (
@@ -67,7 +61,6 @@ export function ProductCard({
         >
           <ShoppingBag className="h-4 w-4" aria-hidden />
           Order Now
-          <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>
     </article>

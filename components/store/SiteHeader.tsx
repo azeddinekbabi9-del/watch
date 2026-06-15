@@ -18,6 +18,7 @@ export function SiteHeader({
   const [open, setOpen] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const brandSettings = { ...settings, store_name: "WQITAK" };
   const results = React.useMemo(() => {
     const normalized = query.trim().toLowerCase();
     if (!normalized) {
@@ -31,35 +32,29 @@ export function SiteHeader({
 
   const nav = (
     <>
-      <Link href="/" className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm">
-        Home
+      <Link href="/" className="rounded-md px-2 py-2 text-base font-semibold text-cream/72 transition-colors duration-300 hover:text-champagne md:px-0 md:py-0 md:text-sm">
+        الرئيسية
       </Link>
       <Link
         href="/products"
-        className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm"
+        className="rounded-md px-2 py-2 text-base font-semibold text-cream/72 transition-colors duration-300 hover:text-champagne md:px-0 md:py-0 md:text-sm"
       >
-        Products
-      </Link>
-      <Link
-        href="/#categories"
-        className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm"
-      >
-        Categories
+        الساعات
       </Link>
       <Link
         href="/track-order"
-        className="rounded-md px-2 py-2 text-base font-medium text-cream/72 transition-colors duration-300 hover:text-gold md:px-0 md:py-0 md:text-sm"
+        className="rounded-md px-2 py-2 text-base font-semibold text-cream/72 transition-colors duration-300 hover:text-champagne md:px-0 md:py-0 md:text-sm"
       >
-        Track Order
+        تتبع الطلب
       </Link>
     </>
   );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gold/20 bg-ink/94 shadow-[0_18px_42px_rgba(0,0,0,0.26)] backdrop-blur-xl transition-all duration-500">
+    <header className="sticky top-0 z-40 border-b border-gold/20 bg-[#050505]/92 shadow-[0_18px_48px_rgba(0,0,0,0.48)] backdrop-blur-xl transition-all duration-500">
       <div className="container-page flex h-[68px] items-center justify-between gap-3 py-2 sm:h-[72px] sm:py-3">
         <Link href="/" className="flex min-w-0 flex-1 items-center gap-3 md:flex-none" aria-label="Home">
-          <Logo settings={settings} size="md" textClassName="text-cream" />
+          <Logo settings={brandSettings} size="md" textClassName="text-champagne" />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">{nav}</nav>
@@ -69,7 +64,7 @@ export function SiteHeader({
             type="button"
             variant="outline"
             size="icon"
-            className="border-gold/35 bg-white/8 text-cream hover:bg-gold/15"
+            className="border-gold/35 bg-white/5 text-champagne hover:bg-gold/15"
             aria-label="Search products"
             onClick={() => setSearchOpen(true)}
           >
@@ -78,7 +73,7 @@ export function SiteHeader({
           <Button
             variant="ghost"
             size="icon"
-            className="text-cream hover:bg-gold/15 md:hidden"
+            className="text-champagne hover:bg-gold/15 md:hidden"
             onClick={() => setOpen((value) => !value)}
             aria-label="Toggle navigation"
           >
@@ -88,14 +83,14 @@ export function SiteHeader({
       </div>
 
       {open ? (
-        <nav className="animate-slide-up border-t border-gold/15 bg-ink px-4 py-4 md:hidden">
+        <nav className="animate-slide-up border-t border-gold/15 bg-[#050505] px-4 py-4 md:hidden">
           <div className="container-page flex flex-col gap-4">{nav}</div>
         </nav>
       ) : null}
 
       {searchOpen ? (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-ink/70 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6">
-          <div className="mx-auto max-w-2xl animate-slide-up rounded-md border border-gold/25 bg-ink p-3 text-cream shadow-luxury sm:p-4">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/78 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6">
+          <div className="luxury-panel mx-auto max-w-2xl animate-slide-up rounded-md p-3 text-cream sm:p-4">
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
                 <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-gold" />
@@ -103,8 +98,8 @@ export function SiteHeader({
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   autoFocus
-                  placeholder="Search watches by name"
-                  className="focus-ring h-12 w-full rounded-md border border-gold/25 bg-white pl-9 pr-3 text-base text-ink placeholder:text-ink/40 md:h-11 md:text-sm"
+                  placeholder="ابحث عن ساعة..."
+                  className="focus-ring h-12 w-full rounded-md border border-gold/25 bg-[#0d0d0d] pl-9 pr-3 text-base text-cream placeholder:text-cream/40 md:h-11 md:text-sm"
                 />
               </div>
               <Button
@@ -125,7 +120,7 @@ export function SiteHeader({
             <div className="mt-4 max-h-[70svh] overflow-y-auto">
               {query.trim() && results.length === 0 ? (
                 <p className="rounded-md border border-dashed border-gold/30 p-6 text-center text-sm text-cream/62">
-                  No product found.
+                  لم يتم العثور على أي ساعة بهذا الاسم.
                 </p>
               ) : null}
               <div className="space-y-3">
@@ -137,21 +132,21 @@ export function SiteHeader({
                       setSearchOpen(false);
                       setQuery("");
                     }}
-                    className="luxury-card-hover grid grid-cols-[64px_1fr] items-center gap-3 rounded-md border border-gold/20 bg-white/8 p-3 sm:grid-cols-[72px_1fr_auto]"
+                    className="luxury-card-hover grid grid-cols-[72px_1fr] items-center gap-3 rounded-md border border-gold/20 bg-white/[0.055] p-3 sm:grid-cols-[80px_1fr_auto]"
                   >
                     <img
                       src={product.image_url || productImageFallback}
                       alt={product.name}
-                      className="h-16 w-16 rounded-md object-cover"
+                      className="h-[72px] w-[72px] rounded-md object-cover sm:h-20 sm:w-20"
                     />
                     <div className="min-w-0">
                       <p className="truncate font-semibold text-cream">{product.name}</p>
-                      <p className="mt-1 text-sm text-cream/60">
+                      <p className="mt-1 text-sm font-bold text-champagne">
                         {formatPrice(product.price, settings.currency)}
                       </p>
                     </div>
-                    <span className="hidden rounded-md bg-gold px-3 py-2 text-xs font-bold text-ink sm:inline-flex">
-                      View
+                    <span className="hidden rounded-md border border-champagne/50 bg-gold-sheen px-3 py-2 text-xs font-bold text-ink sm:inline-flex">
+                      Order Now
                     </span>
                   </Link>
                 ))}

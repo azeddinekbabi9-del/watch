@@ -4,8 +4,9 @@ import { CustomerChrome } from "@/components/store/CustomerChrome";
 import { getProducts, getStoreSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "VQ Watches",
-  description: "A premium watch store powered by Supabase and WhatsApp ordering."
+  title: "WQITAK",
+  description:
+    "Luxury wristwatches with direct ordering, WhatsApp confirmation, and cash on delivery."
 };
 
 export default async function RootLayout({
@@ -19,7 +20,7 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html lang="en">
+    <html lang="ar">
       <body>
         <CustomerChrome settings={settings} searchProducts={searchProducts}>
           {children}

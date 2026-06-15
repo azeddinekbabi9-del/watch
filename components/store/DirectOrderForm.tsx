@@ -168,7 +168,7 @@ export function DirectOrderForm({
 
       const nextTotal = currentPrice * quantity;
       const message = buildDirectOrderMessage({
-        storeName: settings.store_name,
+        storeName: "WQITAK",
         orderId: nextOrderId,
         productName: currentProductName,
         quantity,
@@ -194,49 +194,52 @@ export function DirectOrderForm({
   }
 
   return (
-    <form onSubmit={submit} className="mt-7 rounded-md border border-gold/25 bg-cream/96 p-4 text-ink shadow-soft sm:p-5">
+    <form onSubmit={submit} className="mt-7 rounded-md border border-gold/25 bg-black/35 p-4 text-cream shadow-soft sm:p-5">
       <div className="mb-5">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
-          Direct Order
+          Cash on delivery
         </p>
-        <h2 className="mt-2 text-xl font-semibold text-ink">
-          Order this watch now
+        <h2 className="mt-2 text-xl font-semibold text-cream">
+          Order Now
         </h2>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Full name</span>
+          <span className="text-sm font-semibold text-cream">Name</span>
           <Input
             autoComplete="name"
             value={form.customer_name}
             onChange={(event) => update("customer_name", event.target.value)}
+            placeholder="الاسم الكامل"
             required
           />
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">Phone number</span>
+          <span className="text-sm font-semibold text-cream">Phone</span>
           <Input
             type="tel"
             inputMode="tel"
             autoComplete="tel"
             value={form.customer_phone}
             onChange={(event) => update("customer_phone", event.target.value)}
+            placeholder="+212 6..."
             required
           />
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-ink">City</span>
+          <span className="text-sm font-semibold text-cream">City</span>
           <Input
             autoComplete="address-level2"
             value={form.customer_city}
             onChange={(event) => update("customer_city", event.target.value)}
+            placeholder="المدينة"
             required
           />
         </label>
         <div>
-          <span className="text-sm font-semibold text-ink">Quantity</span>
-          <div className="mt-2 flex w-fit items-center rounded-md border border-gold/25 bg-white shadow-sm">
+          <span className="text-sm font-semibold text-cream">Quantity</span>
+          <div className="mt-2 flex w-fit items-center rounded-md border border-gold/25 bg-[#0d0d0d] shadow-sm">
             <Button
               type="button"
               variant="ghost"
@@ -261,19 +264,19 @@ export function DirectOrderForm({
           </div>
         </div>
         <label className="space-y-2 sm:col-span-2">
-          <span className="text-sm font-semibold text-ink">Address</span>
+          <span className="text-sm font-semibold text-cream">Address</span>
           <Input
             autoComplete="street-address"
             value={form.customer_address}
             onChange={(event) => update("customer_address", event.target.value)}
-            placeholder="Optional"
+            placeholder="اختياري"
           />
         </label>
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-2 rounded-md border border-gold/20 bg-gold/10 p-3 text-sm">
-        <span className="font-semibold text-ink/65">Total</span>
-        <span className="text-lg font-bold text-ink">
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-2 rounded-md border border-gold/25 bg-gold/10 p-3 text-sm">
+        <span className="font-semibold text-cream/65">Total</span>
+        <span className="gold-text text-lg font-bold">
           {formatPrice(total, settings.currency)}
         </span>
       </div>
@@ -290,7 +293,7 @@ export function DirectOrderForm({
         disabled={submitting || unavailable}
       >
         {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-        {unavailable ? "Out of stock" : "Submit order"}
+        {unavailable ? "Out of stock" : "Order Now"}
       </Button>
     </form>
   );

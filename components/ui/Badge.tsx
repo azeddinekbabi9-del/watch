@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 type BadgeTone = "neutral" | "success" | "warning" | "danger" | "info";
 
 const toneClasses: Record<BadgeTone, string> = {
-  neutral: "border border-gold/25 bg-gold/10 text-ink",
-  success: "border border-gold/30 bg-mint text-moss",
-  warning: "border border-gold/35 bg-saffron/20 text-[#7b560c]",
+  neutral: "border border-gold/25 bg-gold/10 text-champagne",
+  success: "border border-gold/30 bg-gold/10 text-champagne",
+  warning: "border border-gold/35 bg-saffron/20 text-champagne",
   danger: "bg-coral/15 text-coral",
   info: "border border-gold/25 bg-ink text-cream"
 };

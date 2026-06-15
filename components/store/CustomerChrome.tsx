@@ -25,7 +25,7 @@ export function CustomerChrome({
   }
 
   return (
-    <div style={style} className="min-h-screen min-h-[100svh] bg-cloud">
+    <div style={style} className="min-h-screen min-h-[100svh] bg-[#050505] text-cream">
       <SiteHeader settings={settings} products={searchProducts} />
       <main>{children}</main>
       <SiteFooter settings={settings} />

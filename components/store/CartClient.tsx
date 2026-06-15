@@ -12,31 +12,34 @@ export function CartClient({ currency }: { currency: string }) {
 
   if (cart.items.length === 0) {
     return (
-      <section className="container-page page-transition py-12">
+      <section className="luxury-page page-transition py-12">
+        <div className="relative container-page">
         <EmptyState
-          title="Your cart is empty"
-          description="Add products to your cart, then come back here to review your order."
+          title="لا توجد ساعات للطلب"
+          description="اختار ساعة من WQITAK ثم أكمل الطلب."
         />
         <div className="mt-6 flex justify-center">
           <Link
             href="/products"
             className={buttonVariants({ variant: "primary", size: "lg" })}
           >
-            Browse products
+            كل الساعات
           </Link>
+        </div>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="container-page page-transition py-10">
+    <section className="luxury-page page-transition py-10">
+      <div className="relative container-page">
       <div className="hero-reveal mb-8">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Cart
+          WQITAK
         </p>
-        <h1 className="mt-2 text-3xl font-bold text-ink md:text-4xl">
-          Review your order
+        <h1 className="gold-text mt-2 text-3xl font-bold text-cream md:text-4xl">
+          راجع الطلب
         </h1>
       </div>
 
@@ -45,7 +48,7 @@ export function CartClient({ currency }: { currency: string }) {
           {cart.items.map((item) => (
             <article
               key={item.id}
-              className="luxury-card-hover animate-slide-up grid gap-4 rounded-md border border-gold/15 bg-cream p-4 sm:grid-cols-[120px_1fr_auto]"
+              className="luxury-card-hover animate-slide-up grid gap-4 rounded-md border border-gold/15 bg-white/[0.045] p-4 sm:grid-cols-[120px_1fr_auto]"
             >
               <img
                 src={item.image_url || productImageFallback}
@@ -55,19 +58,19 @@ export function CartClient({ currency }: { currency: string }) {
               <div>
                 <Link
                   href={`/products/${item.slug}`}
-                  className="text-lg font-bold text-ink"
+                  className="text-lg font-bold text-cream"
                 >
                   {item.name}
                 </Link>
-                <p className="mt-1 text-sm text-ink/55">
+                <p className="mt-1 text-sm text-cream/55">
                   {item.category_name || "Product"}
                 </p>
-                <p className="mt-3 font-semibold text-ink">
+                <p className="gold-text mt-3 font-semibold">
                   {formatPrice(item.price, currency)}
                 </p>
               </div>
               <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:justify-between">
-                <div className="flex items-center rounded-md border border-ink/15">
+                <div className="flex items-center rounded-md border border-gold/20 bg-black/25">
                   <Button
                     type="button"
                     variant="ghost"
@@ -104,16 +107,16 @@ export function CartClient({ currency }: { currency: string }) {
           ))}
         </div>
 
-        <aside className="luxury-reveal h-fit rounded-md border border-gold/15 bg-white p-5 shadow-soft">
-          <h2 className="text-lg font-bold text-ink">Order summary</h2>
-          <div className="mt-5 space-y-3 text-sm text-ink/70">
+        <aside className="luxury-panel luxury-reveal h-fit rounded-md p-5">
+          <h2 className="text-lg font-bold text-cream">Order summary</h2>
+          <div className="mt-5 space-y-3 text-sm text-cream/70">
             <div className="flex justify-between">
               <span>Items</span>
               <span>{cart.count}</span>
             </div>
-            <div className="flex justify-between border-t border-ink/10 pt-3 text-base font-bold text-ink">
+            <div className="flex justify-between border-t border-gold/15 pt-3 text-base font-bold text-cream">
               <span>Total</span>
-              <span>{formatPrice(cart.total, currency)}</span>
+              <span className="gold-text">{formatPrice(cart.total, currency)}</span>
             </div>
           </div>
           <Link
@@ -124,9 +127,10 @@ export function CartClient({ currency }: { currency: string }) {
               className: "mt-6 w-full"
             })}
           >
-            Go to checkout
+            Order Now
           </Link>
         </aside>
+      </div>
       </div>
     </section>
   );

@@ -146,39 +146,39 @@ export function TrackOrderClient({
     : "";
 
   return (
-    <section className="page-transition">
-      <div className="luxury-dark-surface border-b border-gold/20 py-10 text-cream sm:py-12 md:py-16">
+    <section className="luxury-page page-transition">
+      <div className="relative border-b border-gold/20 py-10 text-cream sm:py-12 md:py-16">
         <div className="container-page hero-reveal mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-gold">
-            Track Order
+            WQITAK Tracking
           </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-cream sm:text-5xl md:text-6xl">
-            Follow your timepiece
+          <h1 className="gold-text mt-3 text-4xl font-semibold tracking-[-0.03em] text-cream sm:text-5xl md:text-6xl">
+            تتبع طلبك
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-cream/68 md:text-base">
-            Choose one tracking method, then enter the matching detail from your order.
+            أدخل رقم الهاتف أو Order ID باش تعرف حالة الطلب ديالك.
           </p>
           <div className="gold-divider mx-auto mt-6 w-36" />
         </div>
       </div>
 
-      <div className="container-page grid gap-6 py-8 sm:py-10 lg:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
+      <div className="relative container-page grid gap-6 py-8 sm:py-10 lg:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
         <form
           onSubmit={track}
-          className="luxury-reveal h-fit rounded-md border border-gold/25 bg-ink p-4 text-cream shadow-luxury sm:p-5"
+          className="luxury-panel luxury-reveal h-fit rounded-md p-4 text-cream sm:p-5"
         >
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
             {[
               {
                 value: "phone" as const,
-                label: "Track by Phone",
-                description: "Show all orders using one phone number.",
+                label: "Phone number",
+                description: "بحث بجميع الطلبات المرتبطة بنفس الهاتف.",
                 icon: Phone
               },
               {
                 value: "orderId" as const,
-                label: "Track by Order ID",
-                description: "Show one specific order.",
+                label: "Order ID",
+                description: "بحث عن طلب واحد باستعمال الرمز الكامل.",
                 icon: Hash
               }
             ].map((option) => {
@@ -194,7 +194,7 @@ export function TrackOrderClient({
                     "focus-ring rounded-md border p-4 text-left transition-all duration-300",
                     active
                       ? "border-gold bg-gold-sheen text-ink shadow-soft"
-                      : "border-gold/20 bg-white/6 text-cream hover:border-gold/60 hover:bg-white/10"
+                      : "border-gold/20 bg-white/[0.055] text-cream hover:border-gold/60 hover:bg-white/10"
                   )}
                 >
                   <span className="flex items-center gap-2 text-sm font-bold">
@@ -242,7 +242,7 @@ export function TrackOrderClient({
                   href={contactUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex rounded-md bg-[#25D366] px-3 py-2 text-sm font-bold text-white"
+                  className="mt-3 inline-flex rounded-md border border-[#25D366]/45 bg-[#25D366] px-3 py-2 text-sm font-bold text-white"
                 >
                   Contact on WhatsApp
                 </Link>
@@ -252,7 +252,7 @@ export function TrackOrderClient({
 
           <Button type="submit" className="mt-5 w-full" disabled={loading}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-            Track order
+            Track Order
           </Button>
         </form>
 
@@ -265,15 +265,15 @@ export function TrackOrderClient({
               return (
                 <article
                   key={result.id}
-                  className="luxury-reveal rounded-md border border-gold/20 bg-white/94 p-5 shadow-soft"
+                  className="luxury-panel luxury-reveal rounded-md p-5"
                 >
                   <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                     <div>
-                      <p className="text-sm text-ink/55">Order #{shortId}</p>
-                      <h2 className="mt-1 break-all text-sm font-semibold text-ink sm:text-lg">
+                      <p className="text-sm text-cream/55">Order #{shortId}</p>
+                      <h2 className="mt-1 break-all text-sm font-semibold text-cream sm:text-lg">
                         {result.id}
                       </h2>
-                      <p className="mt-2 text-sm text-ink/60">
+                      <p className="mt-2 text-sm text-cream/60">
                         Placed {new Date(result.created_at).toLocaleDateString()}
                       </p>
                     </div>
@@ -281,24 +281,24 @@ export function TrackOrderClient({
                   </div>
 
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-md border border-gold/15 bg-luxury-surface p-4">
+                    <div className="rounded-md border border-gold/15 bg-white/[0.045] p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">
                         Customer
                       </p>
-                      <p className="mt-2 font-semibold text-ink">
+                      <p className="mt-2 font-semibold text-cream">
                         {result.customer_name}
                       </p>
-                      <p className="text-sm text-ink/60">{result.customer_phone}</p>
-                      <p className="text-sm text-ink/60">{result.customer_city}</p>
+                      <p className="text-sm text-cream/60">{result.customer_phone}</p>
+                      <p className="text-sm text-cream/60">{result.customer_city}</p>
                       {result.customer_address ? (
-                        <p className="text-sm text-ink/60">{result.customer_address}</p>
+                        <p className="text-sm text-cream/60">{result.customer_address}</p>
                       ) : null}
                     </div>
-                    <div className="rounded-md border border-gold/15 bg-luxury-surface p-4">
+                    <div className="rounded-md border border-gold/15 bg-white/[0.045] p-4">
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">
                         Total
                       </p>
-                      <p className="mt-2 text-xl font-semibold text-ink">
+                      <p className="gold-text mt-2 text-xl font-semibold">
                         {formatPrice(Number(result.total_amount), currency)}
                       </p>
                     </div>
@@ -311,12 +311,12 @@ export function TrackOrderClient({
                         className="flex items-start justify-between gap-4 py-3"
                       >
                         <div className="min-w-0">
-                          <p className="break-words font-semibold text-ink">{item.product_name}</p>
-                          <p className="text-sm text-ink/55">
+                          <p className="break-words font-semibold text-cream">{item.product_name}</p>
+                          <p className="text-sm text-cream/55">
                             Quantity: {item.quantity}
                           </p>
                         </div>
-                        <p className="shrink-0 whitespace-nowrap font-semibold text-ink">
+                        <p className="shrink-0 whitespace-nowrap font-semibold text-champagne">
                           {formatPrice(item.total_price, currency)}
                         </p>
                       </div>
@@ -328,9 +328,9 @@ export function TrackOrderClient({
           </div>
         ) : (
           <EmptyState
-            title="Order status will appear here"
-            description="Your order details stay private. We only show matching orders for the order ID or phone number you enter."
-            className="luxury-reveal bg-white/88 shadow-soft"
+            title="حالة الطلب غادي تبان هنا"
+            description="معلومات الطلب كتبقى خاصة، ونظهر فقط الطلبات المطابقة للهاتف أو Order ID."
+            className="luxury-panel luxury-reveal border-solid bg-transparent shadow-soft"
           />
         )}
       </div>

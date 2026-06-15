@@ -26,4 +26,4 @@ export function getSupabaseConfig() {
   };
 }
 
-export const defaultStoreName = "VQ Watches";
+export const defaultStoreName = "WQITAK";

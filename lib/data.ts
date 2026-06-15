@@ -1,10 +1,16 @@
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { getSupabaseConfig } from "@/lib/config";
+import {
+  defaultStoreTextMap,
+  defaultStoreTexts,
+  type StoreTextMap
+} from "@/lib/store-texts";
 import type {
   Category,
   Order,
   OrderWithItems,
   ProductWithCategory,
+  StoreText,
   StoreSettings,
   TrackOrderResult
 } from "@/types/database";
@@ -154,6 +160,72 @@ export async function getStoreSettings() {
     .maybeSingle();
 
   return (data as StoreSettings | null) ?? demoSettings;
+}
+
+export async function getStoreTexts() {
+  if (!configured()) {
+    return defaultStoreTextMap;
+  }
+
+  const supabase: any = createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("store_texts")
+    .select("*")
+    .order("section", { ascending: true })
+    .order("text_key", { ascending: true });
+
+  if (error || !data) {
+    return defaultStoreTextMap;
+  }
+
+  return (data as StoreText[]).reduce((map, item) => {
+    const key = item.text_key as keyof StoreTextMap;
+
+    if (key in defaultStoreTextMap) {
+      map[key] = {
+        en: item.en_text || defaultStoreTextMap[key].en,
+        ar: item.ar_text || defaultStoreTextMap[key].ar
+      };
+    }
+
+    return map;
+  }, { ...defaultStoreTextMap });
+}
+
+export async function getStoreTextRows() {
+  const fallbackRows = defaultStoreTexts.map((item) => ({
+    text_key: item.key,
+    section: item.section,
+    label: item.label,
+    en_text: item.en,
+    ar_text: item.ar,
+    created_at: now,
+    updated_at: now
+  })) satisfies StoreText[];
+
+  if (!configured()) {
+    return fallbackRows;
+  }
+
+  const supabase: any = createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("store_texts")
+    .select("*")
+    .order("section", { ascending: true })
+    .order("text_key", { ascending: true });
+
+  if (error || !data) {
+    return fallbackRows;
+  }
+
+  const rowsByKey = new Map(
+    (data as StoreText[]).map((item) => [item.text_key, item])
+  );
+
+  return fallbackRows.map((fallback) => ({
+    ...fallback,
+    ...(rowsByKey.get(fallback.text_key) ?? {})
+  }));
 }
 
 export async function getCategories(activeOnly = true) {

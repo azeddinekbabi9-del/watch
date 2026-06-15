@@ -56,6 +56,15 @@ export function createOrderAccessToken() {
   return createClientUuid().replace(/-/g, "");
 }
 
+export function createOrderCode(customerName: string, customerPhone: string) {
+  const firstLetter = Array.from(customerName.trim())[0]?.toUpperCase() || "X";
+  const firstPhoneDigits = normalizePhoneForWhatsApp(customerPhone)
+    .slice(0, 4)
+    .padEnd(4, "0");
+
+  return `W${firstLetter}-${firstPhoneDigits}`;
+}
+
 export function parseGalleryImages(value: string) {
   return value
     .split(/\n|,/)

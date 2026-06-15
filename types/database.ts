@@ -44,6 +44,7 @@ export interface Product {
 
 export interface Order {
   id: string;
+  order_code: string | null;
   order_access_token: string;
   customer_name: string;
   customer_phone: string;
@@ -91,6 +92,16 @@ export interface StoreSettings {
   updated_at: string;
 }
 
+export interface StoreText {
+  text_key: string;
+  section: string;
+  label: string;
+  en_text: string;
+  ar_text: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export type ProductWithCategory = Product & {
   categories: Category | null;
 };
@@ -101,6 +112,7 @@ export type OrderWithItems = Order & {
 
 export interface TrackOrderResult {
   id: string;
+  order_code: string | null;
   customer_name: string;
   customer_phone: string;
   customer_city: string;
@@ -127,6 +139,7 @@ export type Database = {
       orders: Table<Order>;
       order_items: Table<OrderItem>;
       store_settings: Table<StoreSettings>;
+      store_texts: Table<StoreText>;
     };
     Views: Record<string, never>;
     Functions: {

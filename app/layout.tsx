@@ -7,7 +7,12 @@ import { getServerLanguage, getServerTheme, getTextDirection } from "@/lib/prefe
 export const metadata: Metadata = {
   title: "WQITAK",
   description:
-    "Luxury wristwatches with direct ordering, WhatsApp confirmation, and cash on delivery."
+    "Luxury wristwatches with direct ordering, WhatsApp confirmation, and cash on delivery.",
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    shortcut: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png", type: "image/png" }]
+  }
 };
 
 export default async function RootLayout({

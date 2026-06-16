@@ -27,16 +27,16 @@ export default async function HomePage() {
 
   return (
     <div className="luxury-page page-transition">
-      <section className="relative min-h-[calc(100svh-68px)] overflow-hidden text-white lg:min-h-[780px]">
+      <section className="store-hero relative min-h-[calc(100svh-68px)] overflow-hidden text-white lg:min-h-[780px]">
         <ResponsiveStoreImage
           src={heroImage}
           alt="WQITAK luxury wristwatch"
           variant="hero"
           className="absolute inset-0 h-full w-full object-cover opacity-42"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(212,175,55,0.2),transparent_24rem)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/72 via-black/78 to-[#050505]" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#050505] to-transparent" />
+        <div className="store-hero-glow absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(212,175,55,0.2),transparent_24rem)]" />
+        <div className="store-hero-dark-overlay absolute inset-0 bg-gradient-to-b from-black/72 via-black/78 to-[#050505]" />
+        <div className="store-hero-bottom-fade absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#050505] to-transparent" />
 
         <div className="container-page relative flex min-h-[calc(100svh-68px)] items-center py-14 sm:py-16 lg:min-h-[780px] lg:py-20">
           <div className="hero-reveal max-w-3xl">
@@ -89,7 +89,7 @@ export default async function HomePage() {
               ].map(([title, text]) => (
                 <div
                   key={title}
-                  className="rounded-md border border-gold/20 bg-white/[0.055] p-4 backdrop-blur"
+                  className="store-hero-feature rounded-md border border-gold/20 bg-white/[0.055] p-4 backdrop-blur"
                 >
                   <p className="text-sm font-bold text-champagne">{title}</p>
                   <p className="mt-1 text-xs text-cream/60">{text}</p>

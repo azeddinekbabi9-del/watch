@@ -24,6 +24,7 @@ create function public.track_order(
 )
 returns table (
   id uuid,
+  order_code text,
   customer_name text,
   customer_phone text,
   customer_city text,
@@ -40,6 +41,7 @@ set search_path = public
 as $$
   select
     orders.id,
+    orders.order_code,
     orders.customer_name,
     orders.customer_phone,
     orders.customer_city,
@@ -63,11 +65,15 @@ as $$
   from public.orders
   left join public.order_items on order_items.order_id = orders.id
   where (
-    orders.id = case
-      when lookup_order_id ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
-        then lookup_order_id::uuid
-      else null
-    end
+    nullif(lookup_order_id, '') is not null
+    and (
+      orders.id = case
+        when lookup_order_id ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+          then lookup_order_id::uuid
+        else null
+      end
+      or upper(coalesce(orders.order_code, '')) = upper(lookup_order_id)
+    )
   )
   or (
     nullif(lookup_customer_phone, '') is not null
@@ -75,7 +81,7 @@ as $$
     and regexp_replace(orders.customer_phone, '\D', '', 'g')
       = regexp_replace(lookup_customer_phone, '\D', '', 'g')
   )
-  group by orders.id
+  group by orders.id, orders.order_code
   order by orders.created_at desc;
 $$;
 

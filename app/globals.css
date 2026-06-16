@@ -195,6 +195,37 @@ select {
   color: var(--text-muted);
 }
 
+.store-hero {
+  isolation: isolate;
+  background-color: #050505;
+  color: #ffffff;
+}
+
+.store-hero-glow {
+  background: radial-gradient(circle at 50% 35%, rgba(212, 175, 55, 0.2), transparent 24rem) !important;
+}
+
+.store-hero-dark-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.78) 52%,
+    #050505 100%
+  ) !important;
+}
+
+.store-hero-bottom-fade {
+  background: linear-gradient(0deg, #050505 0%, rgba(5, 5, 5, 0) 100%) !important;
+}
+
+.store-hero-feature {
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.site-header {
+  color: var(--text-main);
+}
+
 .form-field {
   background: var(--field-bg);
   color: var(--field-text);
@@ -221,6 +252,51 @@ html[data-theme="light"] .luxury-page [class*="to-\\[\\#050505\\]"] {
   --tw-gradient-from: rgba(255, 255, 255, 0.78) var(--tw-gradient-from-position) !important;
   --tw-gradient-via: rgba(255, 255, 255, 0.72) var(--tw-gradient-via-position) !important;
   --tw-gradient-to: rgba(255, 255, 255, 0.96) var(--tw-gradient-to-position) !important;
+}
+
+html[data-theme="light"] .store-hero {
+  background-color: #050505;
+  color: #ffffff;
+}
+
+html[data-theme="light"] .store-hero .gold-text {
+  color: #f5d77a !important;
+}
+
+html[data-theme="light"] .store-hero [class*="text-cream"] {
+  color: rgba(247, 242, 231, 0.88) !important;
+}
+
+html[data-theme="light"] .store-hero [class*="text-champagne"] {
+  color: #f5d77a !important;
+}
+
+html[data-theme="light"] .store-hero-feature {
+  border-color: rgba(212, 175, 55, 0.28) !important;
+  background: rgba(5, 5, 5, 0.58) !important;
+}
+
+html[data-theme="light"] .site-header {
+  border-color: rgba(184, 137, 47, 0.25) !important;
+  background: #ffffff !important;
+  color: #11100e;
+}
+
+html[data-theme="light"] .site-header [class*="text-cream"] {
+  color: rgba(17, 16, 14, 0.74) !important;
+}
+
+html[data-theme="light"] .site-header [class*="text-champagne"] {
+  color: #b8892f !important;
+}
+
+html[data-theme="light"] .site-header [class*="bg-white/5"] {
+  background: rgba(184, 137, 47, 0.08) !important;
+}
+
+html[data-theme="light"] .site-header a:hover,
+html[data-theme="light"] .site-header button:hover {
+  color: #b8892f !important;
 }
 
 .admin-theme-shell {

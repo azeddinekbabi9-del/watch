@@ -63,7 +63,7 @@ export function SiteHeader({
   );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gold/20 bg-[var(--panel-solid)] shadow-[0_18px_48px_rgba(0,0,0,0.22)] backdrop-blur-xl transition-all duration-500">
+    <header className="site-header sticky top-0 z-40 border-b border-gold/20 bg-[var(--panel-solid)] shadow-[0_18px_48px_rgba(0,0,0,0.22)] backdrop-blur-xl transition-all duration-500">
       <div className="container-page flex h-[68px] items-center justify-between gap-3 py-2 sm:h-[72px] sm:py-3">
         <Link href="/" className="flex min-w-0 flex-1 items-center gap-3 md:flex-none" aria-label="Home">
           <Logo settings={brandSettings} size="md" textClassName="text-champagne" />

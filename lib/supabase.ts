@@ -1,9 +1,14 @@
 import { createBrowserClient } from "@supabase/ssr";
 import { getSupabaseConfig } from "@/lib/config";
+import type { Database } from "@/types/database";
 
-let browserClient: any = null;
+type SupabaseBrowserClient = ReturnType<
+  typeof createBrowserClient<Database, "public", Database["public"]>
+>;
 
-export function createSupabaseBrowserClient(): any {
+let browserClient: SupabaseBrowserClient | null = null;
+
+export function createSupabaseBrowserClient(): SupabaseBrowserClient | null {
   const config = getSupabaseConfig();
 
   if (!config.isConfigured) {
@@ -11,7 +16,10 @@ export function createSupabaseBrowserClient(): any {
   }
 
   if (!browserClient) {
-    browserClient = createBrowserClient(config.url, config.anonKey);
+    browserClient = createBrowserClient<Database, "public", Database["public"]>(
+      config.url,
+      config.anonKey
+    );
   }
 
   return browserClient;

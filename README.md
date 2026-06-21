@@ -77,11 +77,11 @@ For an existing Supabase project, run `supabase/update-store-features.sql` after
 
 ## Admin Account Setup
 
-This project uses Supabase Auth for `/admin`.
+This project uses Supabase Auth for `/wqitakadmin098`.
 
 1. In Supabase, go to Authentication > Users.
 2. Create a user with email and password.
-3. Visit `/admin/login`.
+3. Visit `/wqitakadmin098/login`.
 4. Sign in with that user.
 
 Current admin policies allow any authenticated Supabase user to manage the store. For production, improve this by creating an `admin_users` table or custom JWT claim and updating the authenticated RLS policies to check that allowlist.
@@ -90,15 +90,19 @@ Current admin policies allow any authenticated Supabase user to manage the store
 
 Admin routes:
 
-- `/admin`
-- `/admin/products`
-- `/admin/products/new`
-- `/admin/products/[id]/edit`
-- `/admin/categories`
-- `/admin/orders`
-- `/admin/orders/[id]`
-- `/admin/customers`
-- `/admin/settings`
+- `/wqitakadmin098`
+- `/wqitakadmin098/login`
+- `/wqitakadmin098/products`
+- `/wqitakadmin098/products/new`
+- `/wqitakadmin098/products/[id]/edit`
+- `/wqitakadmin098/categories`
+- `/wqitakadmin098/orders`
+- `/wqitakadmin098/orders/[id]`
+- `/wqitakadmin098/customers`
+- `/wqitakadmin098/settings`
+- `/wqitakadmin098/all-texts`
+
+Legacy `/admin` URLs redirect to the public homepage and do not render admin content.
 
 Anything major on the customer side is controlled from admin: products, categories, store name, colors, logo, store description, phone number, hero content, delivery text, social links, homepage section visibility, WhatsApp phone, and currency.
 

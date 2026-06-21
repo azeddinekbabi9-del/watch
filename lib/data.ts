@@ -151,7 +151,7 @@ export async function getStoreSettings() {
     return demoSettings;
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data } = await supabase
     .from("store_settings")
     .select("*")
@@ -167,7 +167,7 @@ export async function getStoreTexts() {
     return defaultStoreTextMap;
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data, error } = await supabase
     .from("store_texts")
     .select("*")
@@ -207,7 +207,7 @@ export async function getStoreTextRows() {
     return fallbackRows;
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data, error } = await supabase
     .from("store_texts")
     .select("*")
@@ -235,8 +235,8 @@ export async function getCategories(activeOnly = true) {
       : demoCategories;
   }
 
-  const supabase: any = createSupabaseServerClient();
-  let query: any = supabase.from("categories").select("*").order("name");
+  const supabase = createSupabaseServerClient();
+  let query = supabase.from("categories").select("*").order("name");
 
   if (activeOnly) {
     query = query.eq("is_active", true);
@@ -272,8 +272,8 @@ export async function getProducts({
     });
   }
 
-  const supabase: any = createSupabaseServerClient();
-  let query: any = supabase
+  const supabase = createSupabaseServerClient();
+  let query = supabase
     .from("products")
     .select("*, categories(*)")
     .order("created_at", { ascending: false });
@@ -293,13 +293,11 @@ export async function getProducts({
       .eq("slug", categorySlug)
       .maybeSingle();
 
-    const selectedCategory: any = category;
-
-    if (!selectedCategory?.id) {
+    if (!category?.id) {
       return [];
     }
 
-    query = query.eq("category_id", selectedCategory.id);
+    query = query.eq("category_id", category.id);
   }
 
   const { data } = await query;
@@ -311,7 +309,7 @@ export async function getProductBySlug(slug: string) {
     return demoProducts.find((product) => product.slug === slug) ?? null;
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data } = await supabase
     .from("products")
     .select("*, categories(*)")
@@ -326,7 +324,7 @@ export async function getProductById(id: string) {
     return demoProducts.find((product) => product.id === id) ?? null;
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data } = await supabase
     .from("products")
     .select("*, categories(*)")
@@ -341,7 +339,7 @@ export async function getOrders() {
     return [] as Order[];
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data } = await supabase
     .from("orders")
     .select("*")
@@ -355,7 +353,7 @@ export async function getOrderById(id: string) {
     return null;
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data } = await supabase
     .from("orders")
     .select("*, order_items(*)")
@@ -370,7 +368,7 @@ export async function getTrackedOrderById(id: string) {
     return null;
   }
 
-  const supabase: any = createSupabaseServerClient();
+  const supabase = createSupabaseServerClient();
   const { data } = await supabase.rpc("track_order", {
     lookup_order_id: id,
     lookup_customer_phone: undefined

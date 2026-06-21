@@ -7,9 +7,9 @@ const imageSizes = {
     sizes: "(max-width: 640px) 500px, 1600px"
   },
   product: {
-    desktop: { width: 800, height: 800 },
+    desktop: { width: 500, height: 500 },
     mobile: { width: 500, height: 500 },
-    sizes: "(max-width: 640px) 500px, 800px"
+    sizes: "(max-width: 500px) 100vw, 500px"
   }
 } as const;
 
@@ -27,7 +27,7 @@ export function getSizedImageUrl(url: string, width: number, height: number) {
 
     if (parsed.hostname.includes("images.unsplash.com")) {
       parsed.searchParams.set("auto", "format");
-      parsed.searchParams.set("fit", "crop");
+      parsed.searchParams.set("fit", width === height ? "max" : "crop");
       parsed.searchParams.set("w", String(width));
       parsed.searchParams.set("h", String(height));
       parsed.searchParams.set("q", "85");

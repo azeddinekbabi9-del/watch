@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ResponsiveStoreImage } from "@/components/store/ResponsiveStoreImage";
+import { ProductImageFrame } from "@/components/store/ProductImageFrame";
 import { productImageFallback } from "@/lib/utils";
 
 export function ProductGallery({
@@ -18,14 +18,12 @@ export function ProductGallery({
 
   return (
     <div className="luxury-reveal space-y-3">
-      <div className="group aspect-square overflow-hidden rounded-md border border-gold/25 bg-[#050505] p-2 shadow-luxury">
-        <ResponsiveStoreImage
-          src={active}
-          alt={productName}
-          variant="product"
-          className="h-full w-full rounded-[0.35rem] object-cover opacity-95 transition-transform duration-700 ease-out group-hover:scale-[1.035]"
-        />
-      </div>
+      <ProductImageFrame
+        src={active}
+        alt={productName}
+        className="mx-auto rounded-md border border-gold/25 p-2 shadow-luxury"
+        imageClassName="rounded-[0.35rem]"
+      />
       {images.length > 1 ? (
         <div className="grid grid-cols-4 gap-3">
           {images.map((item) => (
@@ -36,11 +34,10 @@ export function ProductGallery({
               className="focus-ring aspect-square overflow-hidden rounded-md border border-gold/25 bg-[#050505] p-1 transition-all duration-300 hover:-translate-y-0.5 hover:border-champagne hover:shadow-soft"
               aria-label={`Show ${productName} image`}
             >
-              <ResponsiveStoreImage
+              <ProductImageFrame
                 src={item}
                 alt=""
-                variant="product"
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                className="h-full w-full rounded-[0.25rem]"
               />
             </button>
           ))}

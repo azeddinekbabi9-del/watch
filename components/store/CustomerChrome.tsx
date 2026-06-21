@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { SiteFooter } from "@/components/store/SiteFooter";
 import { SiteHeader } from "@/components/store/SiteHeader";
@@ -28,12 +28,18 @@ export function CustomerChrome({
   const isAdmin = pathname?.startsWith("/admin");
   const style = { "--store-main": settings.main_color } as CSSProperties;
 
+  useEffect(() => {
+    if (!isAdmin) {
+      document.documentElement.dataset.theme = "dark";
+    }
+  }, [isAdmin]);
+
   if (isAdmin) {
     return <div style={style}>{children}</div>;
   }
 
   return (
-    <div style={style} className="min-h-screen min-h-[100svh] bg-[var(--page-bg)] text-[var(--text-main)]">
+    <div style={style} className="public-store-shell min-h-screen min-h-[100svh] bg-[var(--page-bg)] text-[var(--text-main)]">
       <SiteHeader
         settings={settings}
         products={searchProducts}
@@ -43,7 +49,7 @@ export function CustomerChrome({
       />
       <main>{children}</main>
       <SiteFooter settings={settings} language={language} texts={texts} />
-      <WhatsAppFloatingButton phone={settings.admin_whatsapp_phone} />
+      <WhatsAppFloatingButton />
     </div>
   );
 }

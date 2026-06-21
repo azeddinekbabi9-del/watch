@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useCart } from "@/components/store/CartProvider";
+import { ProductImageFrame } from "@/components/store/ProductImageFrame";
 import { formatPrice, productImageFallback } from "@/lib/utils";
 
 export function CartClient({ currency }: { currency: string }) {
@@ -50,10 +51,10 @@ export function CartClient({ currency }: { currency: string }) {
               key={item.id}
               className="luxury-card-hover animate-slide-up grid gap-4 rounded-md border border-gold/15 bg-white/[0.045] p-4 sm:grid-cols-[120px_1fr_auto]"
             >
-              <img
+              <ProductImageFrame
                 src={item.image_url || productImageFallback}
                 alt={item.name}
-                className="aspect-square w-full rounded-md object-cover sm:w-[120px]"
+                className="w-full rounded-md sm:h-[120px] sm:w-[120px]"
               />
               <div>
                 <Link

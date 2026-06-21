@@ -6,7 +6,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/Button";
 import { PreferenceControls } from "@/components/PreferenceControls";
 import { Logo } from "@/components/store/Logo";
-import { ResponsiveStoreImage } from "@/components/store/ResponsiveStoreImage";
+import { ProductImageFrame } from "@/components/store/ProductImageFrame";
 import type { StoreLanguage, StoreTheme } from "@/lib/preferences";
 import { textFromMap, type StoreTextMap } from "@/lib/store-texts";
 import { formatPrice, productImageFallback } from "@/lib/utils";
@@ -73,7 +73,12 @@ export function SiteHeader({
 
         <div className="flex shrink-0 items-center gap-2">
           <div className="hidden md:block">
-            <PreferenceControls language={language} theme={theme} />
+            <PreferenceControls
+              language={language}
+              theme={theme}
+              languageControl="dropdown"
+              showThemeToggle={false}
+            />
           </div>
           <Button
             type="button"
@@ -101,7 +106,12 @@ export function SiteHeader({
         <nav className="animate-slide-up border-t border-gold/15 bg-[var(--panel-solid)] px-4 py-4 md:hidden">
           <div className="container-page flex flex-col gap-4">
             {nav}
-            <PreferenceControls language={language} theme={theme} />
+            <PreferenceControls
+              language={language}
+              theme={theme}
+              languageControl="dropdown"
+              showThemeToggle={false}
+            />
           </div>
         </nav>
       ) : null}
@@ -152,11 +162,10 @@ export function SiteHeader({
                     }}
                     className="luxury-card-hover grid grid-cols-[72px_1fr] items-center gap-3 rounded-md border border-gold/20 bg-white/[0.055] p-3 sm:grid-cols-[80px_1fr_auto]"
                   >
-                    <ResponsiveStoreImage
+                    <ProductImageFrame
                       src={product.image_url || productImageFallback}
                       alt={product.name}
-                      variant="product"
-                      className="h-[72px] w-[72px] rounded-md object-cover sm:h-20 sm:w-20"
+                      className="h-[72px] w-[72px] shrink-0 rounded-md sm:h-20 sm:w-20"
                     />
                     <div className="min-w-0">
                       <p className="truncate font-semibold text-cream">{product.name}</p>

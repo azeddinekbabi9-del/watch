@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-label="Moroccan flag">
+  <rect width="900" height="600" fill="#c1272d"/>
+  <path
+    d="M450 168 485.267 276.531 599.382 276.531 507.057 343.594 542.324 452.125 450 385.063 357.676 452.125 392.943 343.594 300.618 276.531 414.733 276.531Z"
+    fill="none"
+    stroke="#006233"
+    stroke-linejoin="round"
+    stroke-width="27"
+  />
+</svg>
